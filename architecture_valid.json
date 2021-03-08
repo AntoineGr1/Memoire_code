@@ -2,11 +2,7 @@
     {
         "class": "Input",
         "parameters": {
-            "shape": [
-                28,
-                28,
-                1
-            ],
+            "shape": "train_x[0].shape",
             "kernel": 5,
             "padding": "'same'",
             "stride": 1,

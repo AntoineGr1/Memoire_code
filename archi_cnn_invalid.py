@@ -10,4 +10,4 @@ model = keras.models.Sequential([
 	keras.layers.Dense(10, activation='softmax')
 
 ])
-plot_model(model, show_shapes=True, to_file='test_auto_code_invalid.png')
+plot_model(model, show_shapes=True, to_file='model_NV.png')

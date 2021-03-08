@@ -1,0 +1,64 @@
+[
+    {
+        "class": "Flatten",
+        "parameters": {}
+    },
+    {
+        "class": "Pooling",
+        "parameters": {
+            "op": "avg",
+            "kernel": 2,
+            "padding": "'valid'",
+            "stride": null
+        }
+    },
+    
+    {
+        "class": "Pooling",
+        "parameters": {
+            "op": "max",
+            "kernel": 2,
+            "padding": "'valid'",
+            "stride": null
+        }
+    },
+    {
+        "class": "Input",
+        "parameters": {
+            "shape": [
+                28,
+                28,
+                1
+            ],
+            "kernel": 5,
+            "padding": "'same'",
+            "stride": 1,
+            "nb_filter": 6,
+            "fct_activation": "'tanh'"
+        }
+    },
+    {
+        "class": "Dense",
+        "parameters": {
+            "nb_neurones": 84,
+            "fct_activation": "'tanh'"
+        }
+    },
+    {
+        "class": "Output",
+        "parameters": {
+            "nb_neurones": 10,
+            "fct_activation": "'softmax'"
+        }
+    },
+    {
+        "class": "Convolution",
+        "parameters": {
+            "kernel": 5,
+            "padding": "'valid'",
+            "stride": 1,
+            "nb_filter": 16,
+            "fct_activation": "'tanh'"
+        }
+    }
+]

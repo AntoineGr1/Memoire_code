@@ -57,7 +57,7 @@
         }
     },
     {
-        "class": "Output",
+        "class": "Dense",
         "parameters": {
             "nb_neurones": 10,
             "fct_activation": "'softmax'"

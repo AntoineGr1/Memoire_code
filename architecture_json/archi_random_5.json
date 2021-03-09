@@ -1,0 +1,15 @@
+[
+    	{
+            "class":"Convolution",
+			"parameters":{"kernel": 5, "padding": "3", "stride": 3, "nb_filter": 512, "fct_activation": "tanh"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 256, "fct_activation": "selu"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 256, "fct_activation": "tanh"}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
+		}
+]

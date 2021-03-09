@@ -1,0 +1,15 @@
+[
+    	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 120, "fct_activation": "selu"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "avg", "kernel": 3, "padding": "valid", "stride": 1}
+		},	{
+            "class":"InputLayer",
+			"parameters":{"shape": [28, 28, 1], "kernel": 2, "padding": "same", "stride": 2, "nb_filter": 1024, "fct_activation": "selu"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 1, "padding": "1", "stride": 1}
+		}
+]

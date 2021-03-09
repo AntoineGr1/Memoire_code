@@ -1,0 +1,9 @@
+[
+    	{
+            "class":"Flatten",
+			"parameters":{}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 2, "padding": "3", "stride": 3}
+		}
+]

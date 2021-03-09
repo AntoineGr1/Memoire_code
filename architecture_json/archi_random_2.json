@@ -1,0 +1,18 @@
+[
+    	{
+            "class":"Convolution",
+			"parameters":{"kernel": 7, "padding": "1", "stride": 1, "nb_filter": 2048, "fct_activation": "tanh"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "relu"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 5, "padding": "valid", "stride": 2}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
+		}
+]

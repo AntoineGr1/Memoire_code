@@ -1,39 +1,30 @@
 [
     	{
             "class":"InputLayer",
-			"parameters":{"shape": [28, 28, 1]}
+			"parameters":{"shape": "train_x[0].shape"}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 1, "padding": "same", "stride": 4, "nb_filter": 16, "fct_activation": "tanh"}
 		},	{
             "class":"Pooling",
-			"parameters":{"op": "max", "kernel": 3, "padding": "same", "stride": 4}
+			"parameters":{"op": "avg", "kernel": 2, "padding": "valid", "stride": 4}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 2, "padding": "valid", "stride": 4, "nb_filter": 6, "fct_activation": "tanh"}
+			"parameters":{"kernel": 7, "padding": "valid", "stride": 3, "nb_filter": 512, "fct_activation": "relu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 5, "padding": "same", "stride": 1, "nb_filter": 2048, "fct_activation": "tanh"}
-		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 7, "padding": "same", "stride": 1, "nb_filter": 16, "fct_activation": "sigmoid"}
-		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 7, "padding": "valid", "stride": 1, "nb_filter": 64, "fct_activation": "tanh"}
-		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 2, "padding": "valid", "stride": 1, "nb_filter": 128, "fct_activation": "sigmoid"}
+			"parameters":{"kernel": 5, "padding": "same", "stride": 1, "nb_filter": 1024, "fct_activation": "selu"}
 		},	{
             "class":"Pooling",
-			"parameters":{"op": "avg", "kernel": 5, "padding": "same", "stride": 1}
-		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 2, "padding": "valid", "stride": 5, "nb_filter": 256, "fct_activation": "selu"}
-		},	{
-            "class":"Pooling",
-			"parameters":{"op": "avg", "kernel": 7, "padding": "valid", "stride": 4}
+			"parameters":{"op": "avg", "kernel": 1, "padding": "valid", "stride": 1}
 		},	{
             "class":"Flatten",
 			"parameters":{}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 84, "fct_activation": "sigmoid"}
+			"parameters":{"nb_neurones": 256, "fct_activation": "relu"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "selu"}
 		}
 ]

@@ -1,0 +1,11 @@
+file_name,training_time(s),result_loss,result_acc
+archi_random_1_v,88.100919008255,4.787491798400879,0.0003
+archi_random_2_v,36.51428198814392,4.787491798400879,0.0
+archi_random_3_v,0,Error,Error
+archi_random_4_v,0,Error,Error
+archi_random_5_v,0,Error,Error
+archi_random_6_v,0,Error,Error
+archi_random_7_v,255.29816794395447,5.478751149749756,0.0899
+archi_random_8_v,0,Error,Error
+archi_random_9_v,0,Error,Error
+archi_random_10_v,0,Error,Error

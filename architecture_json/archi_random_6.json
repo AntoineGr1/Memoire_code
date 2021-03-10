@@ -1,18 +1,18 @@
 [
     	{
-            "class":"Flatten",
-			"parameters":{}
-		},	{
-            "class":"InputLayer",
-			"parameters":{"shape": [28, 28, 1]}
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "tanh"}
 		},	{
             "class":"Flatten",
 			"parameters":{}
 		},	{
-            "class":"InputLayer",
-			"parameters":{"shape": [28, 28, 1]}
+            "class":"Convolution",
+			"parameters":{"kernel": 3, "padding": "same", "stride": 5, "nb_filter": 1024, "fct_activation": "tanh"}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 1, "fct_activation": "sigmoid"}
+			"parameters":{"nb_neurones": 256, "fct_activation": "selu"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "avg", "kernel": 1, "padding": "valid", "stride": 1}
 		}
 ]

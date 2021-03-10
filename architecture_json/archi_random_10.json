@@ -1,9 +1,12 @@
 [
     	{
-            "class":"Convolution",
-			"parameters":{"kernel": 1, "padding": "valid", "stride": 4, "nb_filter": 256, "fct_activation": "sigmoid"}
-		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 1, "fct_activation": "sigmoid"}
+			"parameters":{"nb_neurones": 1, "fct_activation": "relu"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "avg", "kernel": 1, "padding": "valid", "stride": 2}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 3, "padding": "same", "stride": 3}
 		}
 ]

@@ -1,9 +1,15 @@
 [
     	{
-            "class":"Convolution",
-			"parameters":{"kernel": 1, "padding": "same", "stride": 3, "nb_filter": 6, "fct_activation": "relu"}
+            "class":"Flatten",
+			"parameters":{}
 		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 7, "padding": "same", "stride": 2, "nb_filter": 16, "fct_activation": "tanh"}
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 3, "padding": "same", "stride": 4}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 3, "padding": "valid", "stride": 2}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
 		}
 ]

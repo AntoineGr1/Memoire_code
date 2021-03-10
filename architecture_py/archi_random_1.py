@@ -19,9 +19,10 @@ val_y = train_y[:5000]
 
 try:
     model = keras.models.Sequential([
+        keras.layers.Input((28,28,1)),
 		keras.layers.Dense(84, activation='sigmoid'),
 		keras.layers.Conv2D(16, kernel_size=5, strides=5, activation='relu', padding=[2,2,2,2]),
-		keras.layers.MaxPooling2D(pool_size=1, strides=2, padding='same'),
+		keras.layers.MaxPooling2D(pool_size=(1,1), strides=2, padding='same'),
 
 	])
     plot_model(model, show_shapes=True, to_file="archi_random_1.png")

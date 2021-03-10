@@ -4,6 +4,7 @@ from tensorflow import keras
 import numpy as np
 from tensorflow.keras.utils import plot_model
 import sys
+import traceback
 (train_x, train_y), (test_x, test_y) = keras.datasets.mnist.load_data()
 
 # normaliser les pixel 0-255 -> 0-1
@@ -18,7 +19,7 @@ val_y = train_y[:5000]
 
 try:
     model = keras.models.Sequential([
-		keras.layers.Conv2D(6, kernel_size=5, strides=1,  activation='tanh', input_shape=train_x[0].shape, padding='same'),
+		keras.layers.Input(train_x[0].shape),
 		keras.layers.AveragePooling2D(pool_size=2, strides=None, padding='valid'),
 		keras.layers.Conv2D(16, kernel_size=5, strides=1, activation='tanh', padding='valid'),
 		keras.layers.MaxPooling2D(pool_size=2, strides=None, padding='valid'),
@@ -40,5 +41,5 @@ try:
 except:
     print('error: file architecture_valid_error.log has been create')
     error_file = open("architecture_valid_error.log" , "w")
-    error_file.write(str(sys.exc_info()))
+    traceback.print_exc(file=error_file)
     error_file.close()

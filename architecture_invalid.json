@@ -8,7 +8,7 @@
         "parameters": {
             "op": "avg",
             "kernel": 2,
-            "padding": "'valid'",
+            "padding": "valid",
             "stride": null
         }
     },
@@ -18,7 +18,7 @@
         "parameters": {
             "op": "max",
             "kernel": 2,
-            "padding": "'valid'",
+            "padding": "valid",
             "stride": null
         }
     },
@@ -31,34 +31,34 @@
                 1
             ],
             "kernel": 5,
-            "padding": "'same'",
+            "padding": "same",
             "stride": 1,
             "nb_filter": 6,
-            "fct_activation": "'tanh'"
+            "fct_activation": "tanh"
         }
     },
     {
         "class": "Dense",
         "parameters": {
             "nb_neurones": 84,
-            "fct_activation": "'tanh'"
+            "fct_activation": "tanh"
         }
     },
     {
         "class": "Dense",
         "parameters": {
             "nb_neurones": 10,
-            "fct_activation": "'softmax'"
+            "fct_activation": "softmax"
         }
     },
     {
         "class": "Convolution",
         "parameters": {
             "kernel": 5,
-            "padding": "'valid'",
+            "padding": "valid",
             "stride": 1,
             "nb_filter": 16,
-            "fct_activation": "'tanh'"
+            "fct_activation": "tanh"
         }
     }
 ]

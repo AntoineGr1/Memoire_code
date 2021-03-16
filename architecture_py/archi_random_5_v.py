@@ -28,12 +28,17 @@ result_acc = ""
 try:
     model = keras.models.Sequential([
 		keras.layers.Input([28, 28, 1]),
-		keras.layers.Conv2D(6, kernel_size=3, strides=3, activation='relu', padding='valid'),
-		keras.layers.MaxPooling2D(pool_size=5, strides=2, padding='valid'),
-		keras.layers.Conv2D(12, kernel_size=3, strides=2, activation='selu', padding='valid'),
+		keras.layers.Conv2D(6, kernel_size=2, strides=1, activation='relu', padding='same'),
+		keras.layers.AveragePooling2D(pool_size=2, strides=1, padding='valid'),
+		keras.layers.Conv2D(12, kernel_size=5, strides=3, activation='tanh', padding='same'),
+		keras.layers.AveragePooling2D(pool_size=5, strides=1, padding='same'),
+		keras.layers.Conv2D(36, kernel_size=2, strides=2, activation='relu', padding='valid'),
+		keras.layers.MaxPooling2D(pool_size=5, strides=2, padding='same'),
+		keras.layers.Conv2D(144, kernel_size=3, strides=2, activation='tanh', padding='same'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(10, activation='tanh'),
-		keras.layers.Dense(1, activation='softmax'),
+		keras.layers.Dense(43, activation='selu'),
+		keras.layers.Dense(30, activation='relu'),
+		keras.layers.Dense(10, activation='softmax'),
 
 	])
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_random_5_v.png")

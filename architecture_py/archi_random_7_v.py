@@ -28,11 +28,11 @@ result_acc = ""
 try:
     model = keras.models.Sequential([
 		keras.layers.Input([28, 28, 1]),
-		keras.layers.Conv2D(6, kernel_size=2, strides=3, activation='tanh', padding='same'),
-		keras.layers.AveragePooling2D(pool_size=3, strides=1, padding='same'),
-		keras.layers.Conv2D(12, kernel_size=5, strides=3, activation='selu', padding='same'),
+		keras.layers.Conv2D(6, kernel_size=3, strides=3, activation='tanh', padding='same'),
+		keras.layers.MaxPooling2D(pool_size=3, strides=2, padding='same'),
+		keras.layers.Conv2D(12, kernel_size=3, strides=2, activation='relu', padding='same'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(84, activation='softmax'),
+		keras.layers.Dense(10, activation='softmax'),
 
 	])
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_random_7_v.png")

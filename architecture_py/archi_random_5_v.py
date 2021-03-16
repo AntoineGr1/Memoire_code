@@ -27,18 +27,13 @@ result_loss = ""
 result_acc = ""
 try:
     model = keras.models.Sequential([
-		keras.layers.Input(train_x[0].shape),
-		keras.layers.Conv2D(6, kernel_size=3, strides=5, activation='relu', padding='same'),
-		keras.layers.Conv2D(512, kernel_size=3, strides=4, activation='sigmoid', padding='valid'),
-		keras.layers.Conv2D(256, kernel_size=1, strides=2, activation='sigmoid', padding='valid'),
-		keras.layers.AveragePooling2D(pool_size=3, strides=3, padding='valid'),
-		keras.layers.Conv2D(512, kernel_size=2, strides=3, activation='tanh', padding='valid'),
-		keras.layers.Conv2D(64, kernel_size=1, strides=4, activation='sigmoid', padding='valid'),
-		keras.layers.AveragePooling2D(pool_size=2, strides=3, padding='same'),
+		keras.layers.Input([28, 28, 1]),
+		keras.layers.Conv2D(6, kernel_size=3, strides=3, activation='relu', padding='valid'),
+		keras.layers.MaxPooling2D(pool_size=5, strides=2, padding='valid'),
+		keras.layers.Conv2D(12, kernel_size=3, strides=2, activation='selu', padding='valid'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(10, activation='relu'),
-		keras.layers.Dense(10, activation='sigmoid'),
-		keras.layers.Dense(256, activation='relu'),
+		keras.layers.Dense(10, activation='tanh'),
+		keras.layers.Dense(1, activation='softmax'),
 
 	])
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_random_5_v.png")
@@ -66,13 +61,13 @@ finally:
     with file: 
 
         # identifying header   
-        header = ['file_name', 'training_time', 'result_loss', 'result_acc'] 
+        header = ['file_name', 'training_time(s)', 'result_loss', 'result_acc'] 
         writer = csv.DictWriter(file, fieldnames = header) 
       
         # writing data row-wise into the csv file 
         # writer.writeheader() 
         writer.writerow({'file_name' : 'archi_random_5_v',  
-                         'training_time': training_time,  
+                         'training_time(s)': training_time,  
                          'result_loss': result_loss,
                          'result_acc': result_acc}) 
         print('add line into architecture_results.csv')

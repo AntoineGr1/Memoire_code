@@ -27,13 +27,16 @@ result_loss = ""
 result_acc = ""
 try:
     model = keras.models.Sequential([
-		keras.layers.Input(train_x[0].shape),
-		keras.layers.Conv2D(6, kernel_size=3, strides=2, activation='sigmoid', padding='valid'),
-		keras.layers.MaxPooling2D(pool_size=1, strides=3, padding='valid'),
+		keras.layers.Input([28, 28, 1]),
+		keras.layers.Conv2D(6, kernel_size=5, strides=2, activation='relu', padding='valid'),
+		keras.layers.AveragePooling2D(pool_size=3, strides=1, padding='valid'),
+		keras.layers.Conv2D(12, kernel_size=2, strides=1, activation='relu', padding='valid'),
+		keras.layers.MaxPooling2D(pool_size=5, strides=1, padding='same'),
+		keras.layers.Conv2D(18, kernel_size=2, strides=1, activation='selu', padding='valid'),
+		keras.layers.AveragePooling2D(pool_size=5, strides=3, padding='valid'),
+		keras.layers.Conv2D(24, kernel_size=3, strides=2, activation='tanh', padding='same'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(120, activation='selu'),
-		keras.layers.Dense(120, activation='relu'),
-		keras.layers.Dense(120, activation='tanh'),
+		keras.layers.Dense(1, activation='softmax'),
 
 	])
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_random_2_v.png")
@@ -61,13 +64,13 @@ finally:
     with file: 
 
         # identifying header   
-        header = ['file_name', 'training_time', 'result_loss', 'result_acc'] 
+        header = ['file_name', 'training_time(s)', 'result_loss', 'result_acc'] 
         writer = csv.DictWriter(file, fieldnames = header) 
       
         # writing data row-wise into the csv file 
         # writer.writeheader() 
         writer.writerow({'file_name' : 'archi_random_2_v',  
-                         'training_time': training_time,  
+                         'training_time(s)': training_time,  
                          'result_loss': result_loss,
                          'result_acc': result_acc}) 
         print('add line into architecture_results.csv')

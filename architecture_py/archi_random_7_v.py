@@ -27,12 +27,12 @@ result_loss = ""
 result_acc = ""
 try:
     model = keras.models.Sequential([
-		keras.layers.Input(train_x[0].shape),
-		keras.layers.Conv2D(2048, kernel_size=2, strides=3, activation='relu', padding='same'),
-		keras.layers.MaxPooling2D(pool_size=3, strides=3, padding='valid'),
+		keras.layers.Input([28, 28, 1]),
+		keras.layers.Conv2D(6, kernel_size=2, strides=3, activation='tanh', padding='same'),
+		keras.layers.AveragePooling2D(pool_size=3, strides=1, padding='same'),
+		keras.layers.Conv2D(12, kernel_size=5, strides=3, activation='selu', padding='same'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(120, activation='sigmoid'),
-		keras.layers.Dense(256, activation='selu'),
+		keras.layers.Dense(84, activation='softmax'),
 
 	])
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_random_7_v.png")
@@ -60,13 +60,13 @@ finally:
     with file: 
 
         # identifying header   
-        header = ['file_name', 'training_time', 'result_loss', 'result_acc'] 
+        header = ['file_name', 'training_time(s)', 'result_loss', 'result_acc'] 
         writer = csv.DictWriter(file, fieldnames = header) 
       
         # writing data row-wise into the csv file 
         # writer.writeheader() 
         writer.writerow({'file_name' : 'archi_random_7_v',  
-                         'training_time': training_time,  
+                         'training_time(s)': training_time,  
                          'result_loss': result_loss,
                          'result_acc': result_acc}) 
         print('add line into architecture_results.csv')

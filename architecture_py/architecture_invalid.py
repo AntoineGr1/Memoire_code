@@ -27,30 +27,30 @@ result_loss = ""
 result_acc = ""
 try:
     model = keras.models.Sequential([
-		keras.layers.Input([28, 28, 1]),
-		keras.layers.Conv2D(6, kernel_size=2, strides=1, activation='tanh', padding='valid'),
-		keras.layers.MaxPooling2D(pool_size=5, strides=3, padding='same'),
-		keras.layers.Conv2D(12, kernel_size=5, strides=3, activation='tanh', padding='same'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(1, activation='softmax'),
+		keras.layers.AveragePooling2D(pool_size=2, strides=None, padding='valid'),
+		keras.layers.MaxPooling2D(pool_size=2, strides=None, padding='valid'),
+		keras.layers.Dense(84, activation='tanh'),
+		keras.layers.Dense(10, activation='softmax'),
+		keras.layers.Conv2D(16, kernel_size=5, strides=1, activation='tanh', padding='valid'),
 
 	])
-    plot_model(model, show_shapes=True, to_file="../architecture_img/archi_random_4_v.png")
+    plot_model(model, show_shapes=True, to_file="../architecture_img/architecture_invalid.png")
     model.compile(optimizer='adam', loss=keras.losses.sparse_categorical_crossentropy, metrics=['accuracy'])
     start = time()
     model.fit(train_x, train_y, epochs=5, validation_data=(val_x, val_y))
     training_time = time()-start
     print(model.evaluate(test_x, test_y))
 
-    print('OK: file ../architecture_log/archi_random_4_v.log has been create')
-    log_file = open("../architecture_log/archi_random_4_v.log" , "w")
+    print('OK: file ../architecture_log/architecture_invalid.log has been create')
+    log_file = open("../architecture_log/architecture_invalid.log" , "w")
     log_file.write(str(model.evaluate(test_x, test_y)))
     result_loss = model.evaluate(test_x, test_y)[0]
     result_acc = model.evaluate(test_x, test_y)[1]
     log_file.close()
 except:
-    print('error: file ../architecture_log/archi_random_4_v_error.log has been create')
-    error_file = open("../architecture_log/archi_random_4_v_error.log" , "w")
+    print('error: file ../architecture_log/architecture_invalid_error.log has been create')
+    error_file = open("../architecture_log/architecture_invalid_error.log" , "w")
     traceback.print_exc(file=error_file)
     result_loss = "Error"
     result_acc = "Error"
@@ -65,7 +65,7 @@ finally:
       
         # writing data row-wise into the csv file 
         # writer.writeheader() 
-        writer.writerow({'file_name' : 'archi_random_4_v',  
+        writer.writerow({'file_name' : 'architecture_invalid',  
                          'training_time(s)': training_time,  
                          'result_loss': result_loss,
                          'result_acc': result_acc}) 

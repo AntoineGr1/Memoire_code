@@ -28,9 +28,9 @@ result_acc = ""
 try:
     model = keras.models.Sequential([
 		keras.layers.Input([28, 28, 1]),
-		keras.layers.Conv2D(6, kernel_size=2, strides=3, activation='relu', padding='same'),
-		keras.layers.AveragePooling2D(pool_size=2, strides=2, padding='valid'),
+		keras.layers.Conv2D(6, kernel_size=3, strides=1, activation='relu', padding='same'),
 		keras.layers.Flatten(),
+		keras.layers.Dense(48, activation='relu'),
 		keras.layers.Dense(10, activation='softmax'),
 
 	])

@@ -1,23 +1,24 @@
 
 import tensorflow as tf
 from tensorflow import keras
+from keras.datasets import cifar10
 import numpy as np
 from tensorflow.keras.utils import plot_model
 import sys
 import traceback
 import csv
 from time import time
-(train_x, train_y), (test_x, test_y) = keras.datasets.mnist.load_data()
 
-# normaliser les pixel 0-255 -> 0-1
+# load dataset
+(train_x, train_y), (test_x, test_y) = cifar10.load_data()
+
+# normalize to range 0-1
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-train_x = tf.expand_dims(train_x, 3)
-test_x = tf.expand_dims(test_x, 3)
-
 val_x = train_x[:5000]
 val_y = train_y[:5000]
+    
 
 
 # init training time
@@ -27,10 +28,14 @@ result_loss = ""
 result_acc = ""
 try:
     model = keras.models.Sequential([
-		keras.layers.Input([28, 28, 1]),
-		keras.layers.Conv2D(6, kernel_size=3, strides=1, activation='relu', padding='same'),
+		keras.layers.Input([32, 32, 3]),
+		keras.layers.Conv2D(18, kernel_size=2, strides=2, activation='selu', padding='same'),
+		keras.layers.AveragePooling2D(pool_size=5, strides=1, padding='valid'),
+		keras.layers.Conv2D(36, kernel_size=3, strides=3, activation='relu', padding='same'),
+		keras.layers.Conv2D(108, kernel_size=2, strides=3, activation='tanh', padding='valid'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(48, activation='relu'),
+		keras.layers.Dense(32, activation='selu'),
+		keras.layers.Dense(22, activation='relu'),
 		keras.layers.Dense(10, activation='softmax'),
 
 	])
@@ -46,6 +51,7 @@ try:
     log_file.write(str(model.evaluate(test_x, test_y)))
     result_loss = model.evaluate(test_x, test_y)[0]
     result_acc = model.evaluate(test_x, test_y)[1]
+    nb_layers = len(model.layers)
     log_file.close()
 except:
     print('error: file ../architecture_log/archi_random_4_v_error.log has been create')
@@ -59,7 +65,7 @@ finally:
     with file: 
 
         # identifying header   
-        header = ['file_name', 'training_time(s)', 'result_loss', 'result_acc'] 
+        header = ['file_name', 'training_time(s)', 'result_loss', 'result_acc', 'nb_layers'] 
         writer = csv.DictWriter(file, fieldnames = header) 
       
         # writing data row-wise into the csv file 
@@ -67,6 +73,7 @@ finally:
         writer.writerow({'file_name' : 'archi_random_4_v',  
                          'training_time(s)': training_time,  
                          'result_loss': result_loss,
-                         'result_acc': result_acc}) 
+                         'result_acc': result_acc,
+                         'nb_layers': nb_layers}) 
         print('add line into architecture_results.csv')
     

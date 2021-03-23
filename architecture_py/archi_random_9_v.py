@@ -29,12 +29,19 @@ result_acc = ""
 try:
     model = keras.models.Sequential([
 		keras.layers.Input([32, 32, 3]),
-		keras.layers.Conv2D(18, kernel_size=3, strides=2, activation='tanh', padding='valid'),
-		keras.layers.AveragePooling2D(pool_size=3, strides=2, padding='valid'),
-		keras.layers.Conv2D(36, kernel_size=3, strides=2, activation='tanh', padding='valid'),
+		keras.layers.Conv2D(18, kernel_size=1, strides=1, activation='relu', padding='valid'),
+		keras.layers.MaxPooling2D(pool_size=7, strides=1, padding='same'),
+		keras.layers.Conv2D(36, kernel_size=4, strides=2, activation='selu', padding='valid'),
+		keras.layers.AveragePooling2D(pool_size=4, strides=1, padding='same'),
+		keras.layers.Conv2D(72, kernel_size=7, strides=2, activation='tanh', padding='same'),
+		keras.layers.MaxPooling2D(pool_size=4, strides=1, padding='valid'),
+		keras.layers.Conv2D(144, kernel_size=1, strides=1, activation='selu', padding='valid'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(97, activation='relu'),
-		keras.layers.Dense(67, activation='tanh'),
+		keras.layers.Dense(603, activation='relu'),
+		keras.layers.Dense(471, activation='relu'),
+		keras.layers.Dense(96, activation='relu'),
+		keras.layers.Dense(66, activation='tanh'),
+		keras.layers.Dense(55, activation='selu'),
 		keras.layers.Dense(10, activation='softmax'),
 
 	])

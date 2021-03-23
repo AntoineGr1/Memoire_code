@@ -4,22 +4,43 @@
 			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 3, "padding": "valid", "stride": 2, "nb_filter": 18, "fct_activation": "tanh"}
+			"parameters":{"kernel": 1, "padding": "valid", "stride": 1, "nb_filter": 18, "fct_activation": "relu"}
 		},	{
             "class":"Pooling",
-			"parameters":{"op": "avg", "kernel": 3, "padding": "valid", "stride": 2}
+			"parameters":{"op": "max", "kernel": 7, "padding": "same", "stride": 1}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 3, "padding": "valid", "stride": 2, "nb_filter": 36, "fct_activation": "tanh"}
+			"parameters":{"kernel": 4, "padding": "valid", "stride": 2, "nb_filter": 36, "fct_activation": "selu"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "avg", "kernel": 4, "padding": "same", "stride": 1}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 7, "padding": "same", "stride": 2, "nb_filter": 72, "fct_activation": "tanh"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 4, "padding": "valid", "stride": 1}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 1, "padding": "valid", "stride": 1, "nb_filter": 144, "fct_activation": "selu"}
 		},	{
             "class":"Flatten",
 			"parameters":{}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 97, "fct_activation": "relu"}
+			"parameters":{"nb_neurones": 603, "fct_activation": "relu"}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 67, "fct_activation": "tanh"}
+			"parameters":{"nb_neurones": 471, "fct_activation": "relu"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 96, "fct_activation": "relu"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 66, "fct_activation": "tanh"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 55, "fct_activation": "selu"}
 		},	{
             "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}

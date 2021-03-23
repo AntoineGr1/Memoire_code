@@ -29,13 +29,16 @@ result_acc = ""
 try:
     model = keras.models.Sequential([
 		keras.layers.Input([32, 32, 3]),
-		keras.layers.Conv2D(18, kernel_size=2, strides=3, activation='selu', padding='same'),
-		keras.layers.MaxPooling2D(pool_size=5, strides=2, padding='same'),
-		keras.layers.Conv2D(36, kernel_size=2, strides=3, activation='tanh', padding='same'),
-		keras.layers.Conv2D(2160, kernel_size=3, strides=2, activation='selu', padding='same'),
+		keras.layers.Conv2D(18, kernel_size=1, strides=1, activation='selu', padding='same'),
+		keras.layers.AveragePooling2D(pool_size=6, strides=3, padding='valid'),
+		keras.layers.Conv2D(36, kernel_size=6, strides=3, activation='tanh', padding='same'),
 		keras.layers.Flatten(),
-		keras.layers.Dense(648, activation='relu'),
-		keras.layers.Dense(453, activation='tanh'),
+		keras.layers.Dense(252, activation='selu'),
+		keras.layers.Dense(215, activation='selu'),
+		keras.layers.Dense(127, activation='selu'),
+		keras.layers.Dense(67, activation='relu'),
+		keras.layers.Dense(18, activation='relu'),
+		keras.layers.Dense(15, activation='tanh'),
 		keras.layers.Dense(10, activation='softmax'),
 
 	])

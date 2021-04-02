@@ -1,54 +1,54 @@
 [{
-    	"graph":{"directed": true, "multigraph": false, "graph": {}, "nodes": [{"id": "I"}, {"id": "C1"}, {"id": "P1"}, {"id": "C2"}, {"id": "C3"}, {"id": "add1"}, {"id": "C4"}, {"id": "C5"}, {"id": "C6"}, {"id": "add2"}, {"id": "C7"}, {"id": "C8"}, {"id": "add3"}, {"id": "C9"}, {"id": "C10"}, {"id": "C11"}, {"id": "add4"}, {"id": "F"}, {"id": "D1"}, {"id": "D2"}, {"id": "D3"}], "links": [{"source": "I", "target": "C1"}, {"source": "C1", "target": "P1"}, {"source": "P1", "target": "C2"}, {"source": "P1", "target": "add1"}, {"source": "C2", "target": "C3"}, {"source": "C3", "target": "add1"}, {"source": "add1", "target": "C4"}, {"source": "add1", "target": "C6"}, {"source": "C4", "target": "C4"}, {"source": "C4", "target": "C5"}, {"source": "C5", "target": "add2"}, {"source": "C6", "target": "add2"}, {"source": "add2", "target": "C7"}, {"source": "add2", "target": "add3"}, {"source": "C7", "target": "C7"}, {"source": "C7", "target": "C8"}, {"source": "C8", "target": "add3"}, {"source": "add3", "target": "C9"}, {"source": "add3", "target": "C11"}, {"source": "C9", "target": "C9"}, {"source": "C9", "target": "C10"}, {"source": "C10", "target": "add4"}, {"source": "C11", "target": "add4"}, {"source": "add4", "target": "F"}, {"source": "F", "target": "D1"}, {"source": "D1", "target": "D2"}, {"source": "D2", "target": "D3"}]},
+    	"graph":{"directed": true, "multigraph": false, "graph": {}, "nodes": [{"id": "I"}, {"id": "C1"}, {"id": "P1"}, {"id": "add0"}, {"id": "C2"}, {"id": "C3"}, {"id": "add1"}, {"id": "C4"}, {"id": "C5"}, {"id": "C6"}, {"id": "add2"}, {"id": "C7"}, {"id": "C8"}, {"id": "add3"}, {"id": "C9"}, {"id": "C10"}, {"id": "C11"}, {"id": "add4"}, {"id": "F"}, {"id": "D1"}, {"id": "D2"}, {"id": "D3"}], "links": [{"source": "I", "target": "C1"}, {"source": "C1", "target": "P1"}, {"source": "P1", "target": "add0"}, {"source": "add0", "target": "C2"}, {"source": "add0", "target": "add1"}, {"source": "C2", "target": "C3"}, {"source": "C3", "target": "add1"}, {"source": "add1", "target": "C4"}, {"source": "add1", "target": "C6"}, {"source": "C4", "target": "C4"}, {"source": "C4", "target": "C5"}, {"source": "C5", "target": "add2"}, {"source": "C6", "target": "add2"}, {"source": "add2", "target": "C7"}, {"source": "add2", "target": "add3"}, {"source": "C7", "target": "C7"}, {"source": "C7", "target": "C8"}, {"source": "C8", "target": "add3"}, {"source": "add3", "target": "C9"}, {"source": "add3", "target": "C11"}, {"source": "C9", "target": "C9"}, {"source": "C9", "target": "C10"}, {"source": "C10", "target": "add4"}, {"source": "C11", "target": "add4"}, {"source": "add4", "target": "F"}, {"source": "F", "target": "D1"}, {"source": "D1", "target": "D2"}, {"source": "D2", "target": "D3"}]},
     	"archi":[
     	{
             "class":"InputLayer",
-			"parameters":{"shape": [32, 32, 3], "name": "I"}
+			"parameters":{"shape": [28, 28, 1], "name": "I"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C1", "kernel": 7, "padding": "valid", "stride": 2, "nb_filter": 18, "fct_activation": "selu"}
+			"parameters":{"name": "C1", "kernel": 7, "padding": "same", "stride": 2, "nb_filter": 18, "fct_activation": "relu"}
 		},	{
             "class":"Pooling",
 			"parameters":{"name": "P1", "op": "avg", "kernel": 3, "padding": "valid", "stride": 2}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C2", "kernel": 1, "padding": "same", "stride": 1, "nb_filter": 36, "fct_activation": "selu"}
+			"parameters":{"name": "C2", "kernel": 1, "padding": "same", "stride": 1, "nb_filter": 18, "fct_activation": "relu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C3", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 36, "fct_activation": "selu"}
+			"parameters":{"name": "C3", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 18, "fct_activation": "selu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C4", "kernel": 1, "padding": "same", "stride": 2, "nb_filter": 72, "fct_activation": "selu"}
+			"parameters":{"name": "C4", "kernel": 1, "padding": "same", "stride": 2, "nb_filter": 36, "fct_activation": "tanh"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C5", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 72, "fct_activation": "relu"}
+			"parameters":{"name": "C5", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 36, "fct_activation": "relu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C6", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 36, "fct_activation": "selu"}
+			"parameters":{"name": "C6", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 36, "fct_activation": "relu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C7", "kernel": 1, "padding": "same", "stride": 1, "nb_filter": 144, "fct_activation": "relu"}
+			"parameters":{"name": "C7", "kernel": 1, "padding": "same", "stride": 1, "nb_filter": 36, "fct_activation": "tanh"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C8", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 144, "fct_activation": "relu"}
+			"parameters":{"name": "C8", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 36, "fct_activation": "relu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C9", "kernel": 1, "padding": "same", "stride": 2, "nb_filter": 288, "fct_activation": "selu"}
+			"parameters":{"name": "C9", "kernel": 1, "padding": "same", "stride": 2, "nb_filter": 72, "fct_activation": "selu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C10", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 288, "fct_activation": "tanh"}
+			"parameters":{"name": "C10", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 72, "fct_activation": "relu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"name": "C11", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 144, "fct_activation": "relu"}
+			"parameters":{"name": "C11", "kernel": 3, "padding": "same", "stride": 1, "nb_filter": 72, "fct_activation": "relu"}
 		},	{
             "class":"Flatten",
 			"parameters":{"name": "F"}
 		},	{
             "class":"Dense",
-			"parameters":{"name": "D1", "nb_neurones": 74, "fct_activation": "tanh"}
+			"parameters":{"name": "D1", "nb_neurones": 21, "fct_activation": "selu"}
 		},	{
             "class":"Dense",
-			"parameters":{"name": "D2", "nb_neurones": 12, "fct_activation": "relu"}
+			"parameters":{"name": "D2", "nb_neurones": 15, "fct_activation": "selu"}
 		},	{
             "class":"Dense",
 			"parameters":{"name": "D3", "nb_neurones": 10, "fct_activation": "softmax"}

@@ -36,43 +36,6 @@ train_result_acc = ""
 nb_layers = "not build"
 
 try:
-    
-    def id_block(X, f, filters):
-   
-        X_shortcut = X
-
-        X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-        # X = BatchNormalization(axis=3)(X)
-        X = Activation('relu')(X)
-
-
-        X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-        # X = BatchNormalization(axis=3)(X)
-
-        X = Add()([X, X_shortcut])# SKIP Connection
-        X = Activation('relu')(X)
-
-        return X
-    
-    def conv_block(X, f, filters, s=2):
-    
-        X_shortcut = X
-
-        X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X)
-        # X = BatchNormalization(axis=3)(X)
-        X = Activation('relu')(X)
-
-        X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-        # X = BatchNormalization(axis=3)(X)
-
-        X_shortcut = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X_shortcut)
-        # X_shortcut = BatchNormalization(axis=3)(X_shortcut)
-
-
-        X = Add()([X, X_shortcut])
-        X = Activation('relu')(X)
-
-        return X
     def ResNet():
         X_input = X = Input([28, 28, 1])
         X = Conv2D(18, kernel_size=7, strides=2, activation='tanh', padding='valid')(X)
@@ -93,7 +56,6 @@ try:
     model = Model(inputs=Input.input, outputs=head_model)
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_resnet_test.png")
     model.compile(optimizer='adam', loss=keras.losses.sparse_categorical_crossentropy, metrics=['accuracy'])
-    
     start = time()
     model.fit(train_x, train_y, epochs=5, validation_data=(val_x, val_y))
     training_time = time()-start

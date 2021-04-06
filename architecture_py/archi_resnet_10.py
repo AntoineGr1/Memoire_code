@@ -132,7 +132,7 @@ finally:
         writer.writerow({'file_name' : 'archi_resnet_10',  
                          'training_time(s)': training_time,  
                          'test_result_loss': test_result_loss,
-                         'test_result_acc': test_result_loss,
+                         'test_result_acc': test_result_acc,
                          'train_result_acc': train_result_acc,
                          'train_result_loss': train_result_loss,
                          'nb_layers': nb_layers}) 

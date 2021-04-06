@@ -1,12 +1,4 @@
 file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
-file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
-archi_resnet_test,0,Error,Error,,,not build
-file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
-archi_resnet_test,0,Error,Error,,,not build
-file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
-archi_resnet_test,0,Error,Error,,,not build
-file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
-archi_resnet_test,0,Error,Error,,,not build
-file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
-file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
 archi_resnet_test,145.18239760398865,0.039411016441741956,0.039411016441741956,0.9908,0.03176336475359276,29
+file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers
+archi_resnet_test,160.51385188102722,0.09435865312106907,0.09435865312106907,0.9781,0.0719487377397716,34

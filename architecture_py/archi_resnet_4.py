@@ -10,18 +10,18 @@ import sys
 import traceback
 import csv
 from time import time
-(train_x, train_y), (test_x, test_y) = keras.datasets.mnist.load_data()
 
-# normaliser les pixel 0-255 -> 0-1
+
+# load dataset
+(train_x, train_y), (test_x, test_y) = keras.datasets.cifar10.load_data()
+
+# normalize to range 0-1
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-train_x = tf.expand_dims(train_x, 3)
-test_x = tf.expand_dims(test_x, 3)
-
 val_x = train_x[:5000]
 val_y = train_y[:5000]
-
+    
 
 
 # init training time
@@ -74,19 +74,21 @@ try:
 
         return X
     def ResNet():
-        X_input = X = Input([28, 28, 1])
+        X_input = X = Input([32, 32, 3])
         X = Conv2D(18, kernel_size=7, strides=2, activation='tanh', padding='valid')(X)
-        X = MaxPooling2D(pool_size=3, strides=2, padding='same')(X)
+        X = AveragePooling2D(pool_size=3, strides=2, padding='same')(X)
         X = conv_block(X, 3, 36, 2)
         X = conv_block(X, 3, 72, 2)
-        model = Model(inputs=X_input, outputs=X, name='ResNet18')
+        X = conv_block(X, 3, 144, 2)
+        model = Model(inputs=X_input, outputs=X)
         return model
 
     Input = ResNet()
     head_model = Input.output
     head_model = Flatten()(head_model)
-    head_model = Dense(46, activation='tanh')(head_model)
-    head_model = Dense(11, activation='selu')(head_model)
+    head_model = Dense(95, activation='tanh')(head_model)
+    head_model = Dense(47, activation='tanh')(head_model)
+    head_model = Dense(39, activation='tanh')(head_model)
     head_model = Dense(10, activation='softmax')(head_model)
     model = Model(inputs=Input.input, outputs=head_model)
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_resnet_4.png")

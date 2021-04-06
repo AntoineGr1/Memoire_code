@@ -1,13 +1,13 @@
 [
     	{
             "class":"InputLayer",
-			"parameters":{"shape": [28, 28, 1]}
+			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 7, "padding": "same", "stride": 2, "nb_filter": 18, "fct_activation": "selu"}
+			"parameters":{"kernel": 7, "padding": "same", "stride": 2, "nb_filter": 18, "fct_activation": "tanh"}
 		},	{
             "class":"Pooling",
-			"parameters":{"op": "max", "kernel": 3, "padding": "valid", "stride": 2}
+			"parameters":{"op": "avg", "kernel": 3, "padding": "same", "stride": 2}
 		},	{
             "class":"IdBlock",
 			"parameters":{"kernel": 3, "padding": "same", "nb_filter": 18, "stride": 1}
@@ -18,20 +18,26 @@
             "class":"IdBlock",
 			"parameters":{"kernel": 3, "padding": "same", "nb_filter": 36, "stride": 1}
 		},	{
-            "class":"ConvBlock",
-			"parameters":{"kernel": 3, "nb_filter": 72, "padding": "same", "stride": 2}
+            "class":"IdBlock",
+			"parameters":{"kernel": 3, "padding": "same", "nb_filter": 36, "stride": 1}
 		},	{
             "class":"ConvBlock",
-			"parameters":{"kernel": 3, "nb_filter": 144, "padding": "same", "stride": 2}
+			"parameters":{"kernel": 3, "nb_filter": 72, "padding": "same", "stride": 2}
 		},	{
             "class":"Flatten",
 			"parameters":{}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 59, "fct_activation": "tanh"}
+			"parameters":{"nb_neurones": 80, "fct_activation": "selu"}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 13, "fct_activation": "tanh"}
+			"parameters":{"nb_neurones": 58, "fct_activation": "selu"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 40, "fct_activation": "tanh"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 18, "fct_activation": "selu"}
 		},	{
             "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}

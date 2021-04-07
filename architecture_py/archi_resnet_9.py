@@ -76,21 +76,17 @@ try:
     def ResNet():
         X_input = X = Input([32, 32, 3])
         X = Conv2D(18, kernel_size=7, strides=2, activation='selu', padding='valid')(X)
-        X = AveragePooling2D(pool_size=3, strides=2, padding='valid')(X)
-        X = id_block(X, 3, 18)
-        X = id_block(X, 3, 18)
-        X = id_block(X, 3, 18)
-        X = conv_block(X, 3, 36, 2)
-        X = id_block(X, 3, 36)
+        X = AveragePooling2D(pool_size=4, strides=3, padding='same')(X)
+        X = id_block(X, 5, 18)
+        X = conv_block(X, 7, 36, 6)
         model = Model(inputs=X_input, outputs=X)
         return model
 
     Input = ResNet()
     head_model = Input.output
     head_model = Flatten()(head_model)
-    head_model = Dense(108, activation='relu')(head_model)
-    head_model = Dense(28, activation='selu')(head_model)
-    head_model = Dense(15, activation='tanh')(head_model)
+    head_model = Dense(21, activation='tanh')(head_model)
+    head_model = Dense(16, activation='relu')(head_model)
     head_model = Dense(10, activation='softmax')(head_model)
     model = Model(inputs=Input.input, outputs=head_model)
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_resnet_9.png")

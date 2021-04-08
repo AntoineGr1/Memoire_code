@@ -75,18 +75,16 @@ try:
         return X
     def ResNet():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(18, kernel_size=7, strides=2, activation='selu', padding='valid')(X)
-        X = AveragePooling2D(pool_size=4, strides=3, padding='same')(X)
-        X = id_block(X, 5, 18)
-        X = conv_block(X, 7, 36, 6)
+        X = Conv2D(18, kernel_size=4, strides=2, activation='relu', padding='same')(X)
+        X = AveragePooling2D(pool_size=5, strides=4, padding='valid')(X)
+        X = id_block(X, 2, 18)
+        X = conv_block(X, 7, 36, 4)
         model = Model(inputs=X_input, outputs=X)
         return model
 
     Input = ResNet()
     head_model = Input.output
     head_model = Flatten()(head_model)
-    head_model = Dense(21, activation='tanh')(head_model)
-    head_model = Dense(16, activation='relu')(head_model)
     head_model = Dense(10, activation='softmax')(head_model)
     model = Model(inputs=Input.input, outputs=head_model)
     plot_model(model, show_shapes=True, to_file="../architecture_img/archi_resnet_9.png")

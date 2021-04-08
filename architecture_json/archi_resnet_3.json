@@ -4,22 +4,52 @@
 			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 5, "padding": "valid", "stride": 4, "nb_filter": 18, "fct_activation": "selu"}
+			"parameters":{"kernel": 5, "padding": "same", "stride": 4, "nb_filter": 18, "fct_activation": "relu"}
 		},	{
             "class":"Pooling",
-			"parameters":{"op": "avg", "kernel": 3, "padding": "valid", "stride": 1}
+			"parameters":{"op": "max", "kernel": 2, "padding": "same", "stride": 1}
 		},	{
             "class":"ConvBlock",
-			"parameters":{"kernel": 4, "nb_filter": 36, "padding": "same", "stride": 4}
+			"parameters":{"kernel": 6, "nb_filter": 36, "padding": "same", "stride": 2}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 2, "padding": "same", "nb_filter": 36, "stride": 1}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 7, "padding": "same", "nb_filter": 36, "stride": 1}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 4, "padding": "same", "nb_filter": 36, "stride": 1}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 2, "padding": "same", "nb_filter": 36, "stride": 1}
 		},	{
             "class":"ConvBlock",
-			"parameters":{"kernel": 2, "nb_filter": 72, "padding": "same", "stride": 2}
+			"parameters":{"kernel": 7, "nb_filter": 72, "padding": "same", "stride": 3}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 7, "padding": "same", "nb_filter": 72, "stride": 1}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 4, "padding": "same", "nb_filter": 72, "stride": 1}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 2, "padding": "same", "nb_filter": 72, "stride": 1}
+		},	{
+            "class":"ConvBlock",
+			"parameters":{"kernel": 3, "nb_filter": 144, "padding": "same", "stride": 1}
+		},	{
+            "class":"IdBlock",
+			"parameters":{"kernel": 6, "padding": "same", "nb_filter": 144, "stride": 1}
+		},	{
+            "class":"ConvBlock",
+			"parameters":{"kernel": 6, "nb_filter": 288, "padding": "same", "stride": 4}
 		},	{
             "class":"Flatten",
 			"parameters":{}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 60, "fct_activation": "selu"}
+			"parameters":{"nb_neurones": 230, "fct_activation": "selu"}
 		},	{
             "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}

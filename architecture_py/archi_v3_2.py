@@ -15,8 +15,8 @@ from time import time
 
 
 type_archi = 'DENSENET'
-epsilon = 0.001
-dropout_rate = 0.001
+epsilon = 1.001e-05
+dropout_rate = 0.5
 axis = 3
 compress_factor = 0.5
 
@@ -76,8 +76,7 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([28, 28, 1])
-        X = Conv2D(6, kernel_size=3, strides=1, activation='relu', padding='same')(X)
-        X = Conv2D(12, kernel_size=7, strides=5, activation='relu', padding='valid')(X)
+        X = Conv2D(6, kernel_size=7, strides=5, activation='relu', padding='valid')(X)
         X = AveragePooling2D(pool_size=3, strides=2, padding='valid')(X)
         X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)

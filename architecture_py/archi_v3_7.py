@@ -14,9 +14,9 @@ import csv
 from time import time
 
 
-type_archi = 'ALL'
+type_archi = 'LENET'
 epsilon = 1.001e-05
-dropout_rate = 0.01
+dropout_rate = 0.001
 axis = 3
 compress_factor = 0.5
 
@@ -46,81 +46,12 @@ train_result_acc = ""
 nb_layers = "not build"
 
 
-def id_block(X, f, filters, activation):
-
-    X_shortcut = X
-
-    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-
-
-    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-
-    X = Add()([X, X_shortcut])# SKIP Connection
-    X = Activation(activation)(X)
-
-    return X
-    
-def conv_block(X, f, filters, activation, s=2):
-
-    X_shortcut = X
-
-    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-
-    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-
-    X_shortcut = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X_shortcut)
-    if epsilon != 0:
-        X_shortcut = BatchNormalization(epsilon = epsilon, axis=axis)(X_shortcut)
-
-
-    X = Add()([X, X_shortcut])
-    X = Activation(activation)(X)
-
-    return X
-    
-def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
-        
-    for _ in range(0,nb_layer):
-        if epsilon != 0:
-            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-        X = Activation(activation)(X)
-        X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
-        if dropout_rate != 0:
-            X = Dropout(dropout_rate)(X)
-    
-    return X
-    
-def transition_block(X, f, nb_filter, padding, activation, op, stride):
-    if epsilon != 0:
-            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-    X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
-    if dropout_rate != 0:
-        X = Dropout(dropout_rate)(X)
-
-    if (op == 'avg'):
-        X = AveragePooling2D(pool_size = f, strides=stride, padding=padding)(X)
-    else :
-        X = MaxPooling2D(pool_size=f, strides=stride, padding=padding)(X)
-
-    return X
-    
 try:
     def getModel():
         X_input = X = Input([28, 28, 1])
-        X = denseBlock(X, 5, 1, 2, 'same', 'relu')
-        X = transition_block(X, 5, 1, 'same', 'relu', 'max', 4)
-        X = MaxPooling2D(pool_size=5, strides=5, padding='valid')(X)
+        X = Conv2D(6, kernel_size=4, strides=2, activation='relu', padding='valid')(X)
+        X = AveragePooling2D(pool_size=7, strides=1, padding='valid')(X)
+        X = Conv2D(12, kernel_size=7, strides=7, activation='tanh', padding='same')(X)
         X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)

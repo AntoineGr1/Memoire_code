@@ -14,9 +14,9 @@ import csv
 from time import time
 
 
-type_archi = 'LENET'
+type_archi = 'DENSENET'
 epsilon = 0.001
-dropout_rate = 0.01
+dropout_rate = 0.5
 axis = 3
 compress_factor = 0.5
 
@@ -46,17 +46,45 @@ train_result_acc = ""
 nb_layers = "not build"
 
 
+def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
+        
+    for _ in range(0,nb_layer):
+        if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+        X = Activation(activation)(X)
+        X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+        if dropout_rate != 0:
+            X = Dropout(dropout_rate)(X)
+    
+    return X
+    
+def transition_block(X, f, nb_filter, padding, activation, op, stride):
+    if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+    X = Activation(activation)(X)
+    X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+    if dropout_rate != 0:
+        X = Dropout(dropout_rate)(X)
+
+    if (op == 'avg'):
+        X = AveragePooling2D(pool_size = f, strides=stride, padding=padding)(X)
+    else :
+        X = MaxPooling2D(pool_size=f, strides=stride, padding=padding)(X)
+
+    return X
+    
 try:
     def getModel():
         X_input = X = Input([28, 28, 1])
-        X = denseBlock(X, 6, 1, 2, 'same', 'tanh')
-        X = transition_block(X, 6, 1, 'same', 'tanh', 'max', 2)
-        X = denseBlock(X, 2, 1, 2, 'same', 'tanh')
-        X = transition_block(X, 2, 1, 'same', 'tanh', 'avg', 2)
-        X = denseBlock(X, 2, 1, 1, 'same', 'relu')
-        X = transition_block(X, 2, 1, 'same', 'relu', 'max', 2)
-        X = Conv2D(6, kernel_size=7, strides=7, activation='selu', padding='same')(X)
-        X = GlobalMaxPooling2D()(X)
+        X = Conv2D(6, kernel_size=5, strides=5, activation='relu', padding='same')(X)
+        X = AveragePooling2D(pool_size=4, strides=2, padding='same')(X)
+        X = denseBlock(X, 5, 6, 1, 'same', 'selu')
+        X = transition_block(X, 5, 6, 'same', 'selu', 'avg', 1)
+        X = denseBlock(X, 3, 6, 2, 'same', 'selu')
+        X = transition_block(X, 3, 6, 'same', 'selu', 'avg', 2)
+        X = denseBlock(X, 6, 6, 1, 'same', 'tanh')
+        X = transition_block(X, 6, 6, 'same', 'tanh', 'avg', 5)
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

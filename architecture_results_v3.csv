@@ -1,0 +1,2 @@
+file_name,training_time(s),test_result_loss,test_result_acc,train_result_acc,train_result_loss,nb_layers,type_archi
+archi_v3_test,159.59489369392395,0.0993037216970697,0.9715,0.96881664,0.09910270427757253,43,DENSENET

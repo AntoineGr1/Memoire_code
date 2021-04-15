@@ -14,7 +14,7 @@ import csv
 from time import time
 
 
-type_archi = 'DENSENET'
+type_archi = 'ALL'
 epsilon = 0.0
 dropout_rate = 0.4
 axis = 3

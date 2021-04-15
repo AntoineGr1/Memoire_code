@@ -127,7 +127,7 @@ try:
         X = Conv2D(6, kernel_size=4, strides=2, activation='selu', padding='same')(X)
         X = Conv2D(12, kernel_size=3, strides=3, activation='selu', padding='same')(X)
         X = Conv2D(24, kernel_size=5, strides=2, activation='relu', padding='same')(X)
-        X = conv_block(X, 4, 48, selu, '2')
+        X = conv_block(X, 4, 48, 'selu', 2)
         X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)

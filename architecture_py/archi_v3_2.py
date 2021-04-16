@@ -20,18 +20,17 @@ dropout_rate = 0.5
 axis = 3
 compress_factor = 0.5
 
-(train_x, train_y), (test_x, test_y) = keras.datasets.mnist.load_data()
 
-# normaliser les pixel 0-255 -> 0-1
+# load dataset
+(train_x, train_y), (test_x, test_y) = keras.datasets.cifar10.load_data()
+
+# normalize to range 0-1
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-train_x = tf.expand_dims(train_x, 3)
-test_x = tf.expand_dims(test_x, 3)
-
 val_x = train_x[:5000]
 val_y = train_y[:5000]
-
+    
 
 
 # init training time
@@ -75,7 +74,7 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
     
 try:
     def getModel():
-        X_input = X = Input([28, 28, 1])
+        X_input = X = Input([32, 32, 3])
         X = Conv2D(6, kernel_size=7, strides=5, activation='relu', padding='valid')(X)
         X = AveragePooling2D(pool_size=3, strides=2, padding='valid')(X)
         X = denseBlock(X, 7, 12, 2, 'same', 'tanh')

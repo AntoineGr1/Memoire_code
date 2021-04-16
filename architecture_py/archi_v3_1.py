@@ -20,18 +20,17 @@ dropout_rate = 0.001
 axis = 3
 compress_factor = 0.5
 
-(train_x, train_y), (test_x, test_y) = keras.datasets.mnist.load_data()
 
-# normaliser les pixel 0-255 -> 0-1
+# load dataset
+(train_x, train_y), (test_x, test_y) = keras.datasets.cifar10.load_data()
+
+# normalize to range 0-1
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-train_x = tf.expand_dims(train_x, 3)
-test_x = tf.expand_dims(test_x, 3)
-
 val_x = train_x[:5000]
 val_y = train_y[:5000]
-
+    
 
 
 # init training time
@@ -90,7 +89,7 @@ def conv_block(X, f, filters, activation, s=2):
     
 try:
     def getModel():
-        X_input = X = Input([28, 28, 1])
+        X_input = X = Input([32, 32, 3])
         X = conv_block(X, 2, 6, 'relu', 2)
         X = Conv2D(12, kernel_size=4, strides=3, activation='relu', padding='same')(X)
         X = AveragePooling2D(pool_size=3, strides=1, padding='same')(X)

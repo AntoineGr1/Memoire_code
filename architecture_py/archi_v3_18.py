@@ -15,23 +15,22 @@ from time import time
 
 
 type_archi = 'LENET'
-epsilon = 1.1e-05
-dropout_rate = 0.001
+epsilon = 1.1e-07
+dropout_rate = 0.8
 axis = 3
 compress_factor = 0.5
 
-(train_x, train_y), (test_x, test_y) = keras.datasets.mnist.load_data()
 
-# normaliser les pixel 0-255 -> 0-1
+# load dataset
+(train_x, train_y), (test_x, test_y) = keras.datasets.cifar10.load_data()
+
+# normalize to range 0-1
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-train_x = tf.expand_dims(train_x, 3)
-test_x = tf.expand_dims(test_x, 3)
-
 val_x = train_x[:5000]
 val_y = train_y[:5000]
-
+    
 
 
 # init training time
@@ -48,10 +47,12 @@ nb_layers = "not build"
 
 try:
     def getModel():
-        X_input = X = Input([28, 28, 1])
-        X = Conv2D(6, kernel_size=3, strides=2, activation='tanh', padding='valid')(X)
-        X = Conv2D(12, kernel_size=4, strides=3, activation='tanh', padding='valid')(X)
-        X = MaxPooling2D(pool_size=4, strides=2, padding='valid')(X)
+        X_input = X = Input([32, 32, 3])
+        X = Conv2D(6, kernel_size=5, strides=1, activation='selu', padding='same')(X)
+        X = MaxPooling2D(pool_size=4, strides=1, padding='valid')(X)
+        X = Conv2D(12, kernel_size=6, strides=3, activation='relu', padding='valid')(X)
+        X = MaxPooling2D(pool_size=6, strides=6, padding='same')(X)
+        X = Conv2D(24, kernel_size=7, strides=4, activation='tanh', padding='same')(X)
         X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)

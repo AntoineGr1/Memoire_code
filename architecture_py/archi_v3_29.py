@@ -15,23 +15,22 @@ from time import time
 
 
 type_archi = 'DENSENET'
-epsilon = 1.1e-05
-dropout_rate = 0.4
+epsilon = 0.0
+dropout_rate = 0.1
 axis = 3
 compress_factor = 0.5
 
-(train_x, train_y), (test_x, test_y) = keras.datasets.mnist.load_data()
 
-# normaliser les pixel 0-255 -> 0-1
+# load dataset
+(train_x, train_y), (test_x, test_y) = keras.datasets.cifar10.load_data()
+
+# normalize to range 0-1
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-train_x = tf.expand_dims(train_x, 3)
-test_x = tf.expand_dims(test_x, 3)
-
 val_x = train_x[:5000]
 val_y = train_y[:5000]
-
+    
 
 
 # init training time
@@ -75,15 +74,15 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
     
 try:
     def getModel():
-        X_input = X = Input([28, 28, 1])
-        X = denseBlock(X, 4, 1, 2, 'same', 'selu')
-        X = transition_block(X, 4, 1, 'same', 'selu', 'avg', 3)
-        X = denseBlock(X, 4, 1, 1, 'same', 'tanh')
-        X = transition_block(X, 4, 1, 'same', 'tanh', 'avg', 4)
-        X = denseBlock(X, 2, 1, 1, 'same', 'tanh')
-        X = transition_block(X, 2, 1, 'same', 'tanh', 'max', 1)
-        X = Conv2D(6, kernel_size=7, strides=3, activation='selu', padding='same')(X)
-        X = Flatten()(X)
+        X_input = X = Input([32, 32, 3])
+        X = denseBlock(X, 4, 1, 1, 'same', 'relu')
+        X = transition_block(X, 4, 1, 'same', 'relu', 'max', 4)
+        X = MaxPooling2D(pool_size=6, strides=2, padding='same')(X)
+        X = Conv2D(6, kernel_size=2, strides=1, activation='selu', padding='valid')(X)
+        X = Conv2D(12, kernel_size=3, strides=1, activation='tanh', padding='same')(X)
+        X = denseBlock(X, 4, 12, 1, 'same', 'relu')
+        X = transition_block(X, 4, 12, 'same', 'relu', 'max', 3)
+        X = GlobalAveragePooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

@@ -1,7 +1,7 @@
 [
     	{
             "class":"InputLayer",
-			"parameters":{"shape": [28, 28, 1]}
+			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"Convolution",
 			"parameters":{"kernel": 7, "padding": "valid", "stride": 4, "nb_filter": 6, "fct_activation": "selu"}

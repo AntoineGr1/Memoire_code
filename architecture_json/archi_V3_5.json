@@ -1,7 +1,7 @@
 [
     	{
             "class":"InputLayer",
-			"parameters":{"shape": [28, 28, 1]}
+			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"DenseNetBlock",
 			"parameters":{"kernel": 6, "nb_filter": 1, "padding": "same", "nb_layer": 2, "stride": 2, "fct_activation": "selu", "op": "avg"}

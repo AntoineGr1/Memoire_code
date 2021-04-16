@@ -9,8 +9,11 @@
             "class":"Pooling",
 			"parameters":{"op": "avg", "kernel": 3, "padding": "valid", "stride": 2}
 		},	{
-            "class":"GlobalPooling",
-			"parameters":{"op": "max"}
+            "class":"DenseNetBlock",
+			"parameters":{"kernel": 7, "nb_filter": 12, "padding": "same", "nb_layer": 2, "stride": 3, "fct_activation": "tanh", "op": "max"}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
 		},	{
             "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}

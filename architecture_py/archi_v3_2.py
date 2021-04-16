@@ -78,7 +78,9 @@ try:
         X_input = X = Input([28, 28, 1])
         X = Conv2D(6, kernel_size=7, strides=5, activation='relu', padding='valid')(X)
         X = AveragePooling2D(pool_size=3, strides=2, padding='valid')(X)
-        X = GlobalMaxPooling2D()(X)
+        X = denseBlock(X, 7, 12, 2, 'same', 'tanh')
+        X = transition_block(X, 7, 12, 'same', 'tanh', 'max', 3)
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

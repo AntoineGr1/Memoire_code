@@ -3,6 +3,7 @@ import numpy as np
 import os
 from keras import backend as K
 from tensorflow import keras
+from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.models import Sequential, Model,load_model
 from tensorflow.keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D, GlobalAveragePooling2D, MaxPool2D, Concatenate, Dropout
 from tensorflow.keras.initializers import glorot_uniform
@@ -89,7 +90,9 @@ try:
     model.compile(optimizer='adam', loss=keras.losses.sparse_categorical_crossentropy, metrics=['accuracy'])
 
     start = time()
-    model.fit(train_x, train_y, epochs=5, validation_data=(val_x, val_y))
+    es = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1)
+    list_cb = [es]
+    history = model.fit(train_x, train_y, epochs=50, validation_split=0.1, callbacks=list_cb)
     training_time = time()-start
     print(model.evaluate(test_x, test_y))
 
@@ -121,7 +124,7 @@ finally:
     with file: 
 
         # identifying header   
-        header = ['file_name', 'training_time(s)', 'test_result_loss', 'test_result_acc', 'train_result_acc', 'train_result_loss', 'nb_layers', 'type_archi'] 
+        header = ['file_name', 'training_time(s)', 'test_result_loss', 'test_result_acc', 'train_result_acc', 'train_result_loss', 'nb_layers', 'epochs', 'type_archi'] 
         writer = csv.DictWriter(file, fieldnames = header) 
       
         # writing data row-wise into the csv file 
@@ -133,6 +136,7 @@ finally:
                          'train_result_acc': train_result_acc,
                          'train_result_loss': train_result_loss,
                          'nb_layers': nb_layers,
+                         'epochs' : len(history.history['loss']),
                          'type_archi': type_archi}) 
         print('add line into architecture_results_v3.csv')
     file.close()

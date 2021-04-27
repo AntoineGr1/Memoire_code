@@ -89,7 +89,7 @@ def conv_block(X, f, filters, activation, s=2):
     return X
     
 def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
-        
+    x_input = X    
     for _ in range(0,nb_layer):
         if epsilon != 0:
             X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
@@ -97,7 +97,7 @@ def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
         X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
         if dropout_rate != 0:
             X = Dropout(dropout_rate)(X)
-    
+    X = Concatenate()([X, x_input])
     return X
     
 def transition_block(X, f, nb_filter, padding, activation, op, stride):
@@ -118,13 +118,21 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = conv_block(X, 7, 6, 'selu', 3)
-        X = denseBlock(X, 4, 6, 2, 'same', 'tanh')
-        X = transition_block(X, 4, 6, 'same', 'tanh', 'avg', 1)
-        X = Conv2D(12, kernel_size=5, strides=3, activation='selu', padding='valid')(X)
-        X = denseBlock(X, 5, 12, 1, 'same', 'relu')
-        X = transition_block(X, 5, 12, 'same', 'relu', 'max', 3)
-        X = GlobalAveragePooling2D()(X)
+        X = conv_block(X, 7, 18, 'selu', 3)
+        X = denseBlock(X, 4, 18, 3, 'same', 'selu')
+        X = denseBlock(X, 4, 18, 3, 'same', 'selu')
+        X = transition_block(X, 4, 18, 'same', 'selu', 'max', 1)
+        X = Conv2D(36, kernel_size=2, strides=1, activation='relu', padding='same')(X)
+        X = denseBlock(X, 5, 36, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 36, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 36, 2, 'same', 'relu')
+        X = transition_block(X, 5, 36, 'same', 'relu', 'avg', 5)
+        X = denseBlock(X, 4, 36, 1, 'same', 'relu')
+        X = denseBlock(X, 4, 36, 1, 'same', 'relu')
+        X = denseBlock(X, 4, 36, 1, 'same', 'relu')
+        X = denseBlock(X, 4, 36, 1, 'same', 'relu')
+        X = transition_block(X, 4, 36, 'same', 'relu', 'max', 3)
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model
@@ -149,6 +157,7 @@ try:
     
     # save train result
     log_file.write('train result : ' + str(model.evaluate(test_x, test_y)))
+    log_file.write('History train result : ' + str(history.history))
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     

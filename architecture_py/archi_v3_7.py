@@ -16,8 +16,8 @@ from time import time
 
 
 type_archi = 'RESNET'
-epsilon = 0.001
-dropout_rate = 0.4
+epsilon = 1.1e-07
+dropout_rate = 0.01
 axis = 3
 compress_factor = 0.5
 
@@ -91,12 +91,13 @@ def conv_block(X, f, filters, activation, s=2):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(6, kernel_size=2, strides=2, activation='relu', padding='same')(X)
-        X = Conv2D(12, kernel_size=7, strides=1, activation='relu', padding='valid')(X)
-        X = id_block(X, 7, 12, 'tanh')
+        X = id_block(X, 4, 3, 'selu')
+        X = Conv2D(18, kernel_size=4, strides=3, activation='tanh', padding='same')(X)
+        X = Conv2D(36, kernel_size=7, strides=1, activation='relu', padding='valid')(X)
+        X = id_block(X, 7, 36, 'tanh')
         X = MaxPooling2D(pool_size=2, strides=1, padding='same')(X)
-        X = conv_block(X, 6, 24, 'relu', 3)
-        X = conv_block(X, 7, 48, 'tanh', 5)
+        X = conv_block(X, 6, 72, 'relu', 3)
+        X = conv_block(X, 7, 144, 'tanh', 5)
         X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
@@ -122,6 +123,7 @@ try:
     
     # save train result
     log_file.write('train result : ' + str(model.evaluate(test_x, test_y)))
+    log_file.write('History train result : ' + str(history.history))
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     

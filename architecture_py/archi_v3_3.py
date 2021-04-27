@@ -91,10 +91,10 @@ def conv_block(X, f, filters, activation, s=2):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(6, kernel_size=7, strides=4, activation='selu', padding='valid')(X)
-        X = conv_block(X, 4, 12, 'relu', 1)
-        X = conv_block(X, 6, 24, 'relu', 3)
-        X = Conv2D(48, kernel_size=2, strides=1, activation='relu', padding='same')(X)
+        X = Conv2D(18, kernel_size=7, strides=4, activation='selu', padding='valid')(X)
+        X = conv_block(X, 4, 36, 'relu', 1)
+        X = conv_block(X, 6, 72, 'relu', 3)
+        X = Conv2D(144, kernel_size=2, strides=1, activation='relu', padding='same')(X)
         X = GlobalAveragePooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
@@ -120,6 +120,7 @@ try:
     
     # save train result
     log_file.write('train result : ' + str(model.evaluate(test_x, test_y)))
+    log_file.write('History train result : ' + str(history.history))
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     

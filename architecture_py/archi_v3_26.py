@@ -15,9 +15,9 @@ import csv
 from time import time
 
 
-type_archi = 'RESNET'
+type_archi = 'ALL'
 epsilon = 1.1e-05
-dropout_rate = 0.001
+dropout_rate = 0.4
 axis = 3
 compress_factor = 0.5
 
@@ -88,13 +88,56 @@ def conv_block(X, f, filters, activation, s=2):
 
     return X
     
+def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
+    x_input = X    
+    for _ in range(0,nb_layer):
+        if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+        X = Activation(activation)(X)
+        X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+        if dropout_rate != 0:
+            X = Dropout(dropout_rate)(X)
+    X = Concatenate()([X, x_input])
+    return X
+    
+def transition_block(X, f, nb_filter, padding, activation, op, stride):
+    if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+    X = Activation(activation)(X)
+    X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+    if dropout_rate != 0:
+        X = Dropout(dropout_rate)(X)
+
+    if (op == 'avg'):
+        X = AveragePooling2D(pool_size = f, strides=stride, padding=padding)(X)
+    else :
+        X = MaxPooling2D(pool_size=f, strides=stride, padding=padding)(X)
+
+    return X
+    
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = conv_block(X, 2, 6, 'tanh', 2)
-        X = Conv2D(12, kernel_size=5, strides=4, activation='selu', padding='same')(X)
-        X = conv_block(X, 7, 24, 'tanh', 2)
-        X = GlobalAveragePooling2D()(X)
+        X = Conv2D(18, kernel_size=3, strides=3, activation='relu', padding='same')(X)
+        X = denseBlock(X, 7, 18, 3, 'same', 'relu')
+        X = denseBlock(X, 7, 18, 3, 'same', 'relu')
+        X = denseBlock(X, 7, 18, 3, 'same', 'relu')
+        X = transition_block(X, 7, 18, 'same', 'relu', 'avg', 1)
+        X = denseBlock(X, 2, 18, 3, 'same', 'selu')
+        X = denseBlock(X, 2, 18, 3, 'same', 'selu')
+        X = denseBlock(X, 2, 18, 3, 'same', 'selu')
+        X = transition_block(X, 2, 18, 'same', 'selu', 'avg', 1)
+        X = denseBlock(X, 4, 18, 1, 'same', 'relu')
+        X = denseBlock(X, 4, 18, 1, 'same', 'relu')
+        X = denseBlock(X, 4, 18, 1, 'same', 'relu')
+        X = denseBlock(X, 4, 18, 1, 'same', 'relu')
+        X = transition_block(X, 4, 18, 'same', 'relu', 'avg', 1)
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = transition_block(X, 5, 18, 'same', 'relu', 'max', 2)
+        X = MaxPooling2D(pool_size=4, strides=3, padding='valid')(X)
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model
@@ -119,6 +162,7 @@ try:
     
     # save train result
     log_file.write('train result : ' + str(model.evaluate(test_x, test_y)))
+    log_file.write('History train result : ' + str(history.history))
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     

@@ -16,8 +16,8 @@ from time import time
 
 
 type_archi = 'RESNET'
-epsilon = 1.001e-05
-dropout_rate = 0.5
+epsilon = 0.001
+dropout_rate = 0.8
 axis = 3
 compress_factor = 0.5
 
@@ -91,16 +91,15 @@ def conv_block(X, f, filters, activation, s=2):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = id_block(X, 2, 1, 'relu')
-        X = conv_block(X, 6, 6, 'selu', 4)
-        X = conv_block(X, 4, 12, 'tanh', 1)
-        X = Conv2D(24, kernel_size=2, strides=1, activation='selu', padding='same')(X)
-        X = Conv2D(48, kernel_size=2, strides=1, activation='tanh', padding='valid')(X)
-        X = id_block(X, 6, 48, 'selu')
-        X = MaxPooling2D(pool_size=3, strides=3, padding='valid')(X)
-        X = conv_block(X, 3, 96, 'tanh', 1)
-        X = id_block(X, 5, 96, 'relu')
-        X = GlobalMaxPooling2D()(X)
+        X = id_block(X, 2, 3, 'relu')
+        X = AveragePooling2D(pool_size=6, strides=1, padding='valid')(X)
+        X = Conv2D(18, kernel_size=7, strides=2, activation='tanh', padding='valid')(X)
+        X = AveragePooling2D(pool_size=6, strides=5, padding='valid')(X)
+        X = conv_block(X, 5, 36, 'relu', 1)
+        X = id_block(X, 6, 36, 'relu')
+        X = id_block(X, 4, 36, 'selu')
+        X = Conv2D(72, kernel_size=7, strides=2, activation='relu', padding='same')(X)
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model
@@ -125,6 +124,7 @@ try:
     
     # save train result
     log_file.write('train result : ' + str(model.evaluate(test_x, test_y)))
+    log_file.write('History train result : ' + str(history.history))
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     

@@ -16,8 +16,8 @@ from time import time
 
 
 type_archi = 'LENET'
-epsilon = 0.001
-dropout_rate = 0.001
+epsilon = 1.1e-07
+dropout_rate = 0.8
 axis = 3
 compress_factor = 0.5
 
@@ -49,9 +49,9 @@ nb_layers = "not build"
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(6, kernel_size=7, strides=5, activation='relu', padding='valid')(X)
-        X = MaxPooling2D(pool_size=7, strides=1, padding='same')(X)
-        X = Conv2D(12, kernel_size=6, strides=5, activation='tanh', padding='valid')(X)
+        X = Conv2D(18, kernel_size=2, strides=2, activation='tanh', padding='same')(X)
+        X = AveragePooling2D(pool_size=7, strides=4, padding='same')(X)
+        X = Conv2D(36, kernel_size=5, strides=5, activation='relu', padding='same')(X)
         X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
@@ -77,6 +77,7 @@ try:
     
     # save train result
     log_file.write('train result : ' + str(model.evaluate(test_x, test_y)))
+    log_file.write('History train result : ' + str(history.history))
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     

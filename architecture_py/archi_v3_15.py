@@ -47,7 +47,7 @@ nb_layers = "not build"
 
 
 def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
-        
+    x_input = X    
     for _ in range(0,nb_layer):
         if epsilon != 0:
             X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
@@ -55,7 +55,7 @@ def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
         X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
         if dropout_rate != 0:
             X = Dropout(dropout_rate)(X)
-    
+    X = Concatenate()([X, x_input])
     return X
     
 def transition_block(X, f, nb_filter, padding, activation, op, stride):
@@ -76,11 +76,16 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(6, kernel_size=4, strides=1, activation='tanh', padding='same')(X)
+        X = Conv2D(18, kernel_size=4, strides=1, activation='tanh', padding='same')(X)
         X = AveragePooling2D(pool_size=4, strides=3, padding='valid')(X)
-        X = denseBlock(X, 5, 6, 1, 'same', 'relu')
-        X = transition_block(X, 5, 6, 'same', 'relu', 'avg', 2)
-        X = GlobalMaxPooling2D()(X)
+        X = denseBlock(X, 5, 18, 1, 'same', 'relu')
+        X = denseBlock(X, 5, 18, 1, 'same', 'relu')
+        X = transition_block(X, 5, 18, 'same', 'relu', 'avg', 2)
+        X = denseBlock(X, 3, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 3, 18, 2, 'same', 'relu')
+        X = transition_block(X, 3, 18, 'same', 'relu', 'max', 1)
+        X = AveragePooling2D(pool_size=5, strides=4, padding='valid')(X)
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model
@@ -105,6 +110,7 @@ try:
     
     # save train result
     log_file.write('train result : ' + str(model.evaluate(test_x, test_y)))
+    log_file.write('History train result : ' + str(history.history))
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     

@@ -17,7 +17,7 @@ from time import time
 
 type_archi = 'DENSENET'
 epsilon = 0.0
-dropout_rate = 0.1
+dropout_rate = 0.01
 axis = 3
 compress_factor = 0.5
 
@@ -76,14 +76,19 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(18, kernel_size=3, strides=1, activation='selu', padding='valid')(X)
-        X = MaxPooling2D(pool_size=6, strides=4, padding='same')(X)
-        X = Conv2D(36, kernel_size=5, strides=1, activation='selu', padding='valid')(X)
-        X = denseBlock(X, 5, 36, 1, 'same', 'relu')
-        X = denseBlock(X, 5, 36, 1, 'same', 'relu')
-        X = denseBlock(X, 5, 36, 1, 'same', 'relu')
-        X = denseBlock(X, 5, 36, 1, 'same', 'relu')
-        X = transition_block(X, 5, 36, 'same', 'relu', 'max', 2)
+        X = Conv2D(18, kernel_size=7, strides=3, activation='selu', padding='same')(X)
+        X = Conv2D(36, kernel_size=3, strides=1, activation='selu', padding='valid')(X)
+        X = MaxPooling2D(pool_size=3, strides=3, padding='same')(X)
+        X = MaxPooling2D(pool_size=3, strides=1, padding='same')(X)
+        X = denseBlock(X, 5, 144, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 144, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 144, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 144, 2, 'same', 'relu')
+        X = transition_block(X, 5, 144, 'same', 'relu', 'max', 1)
+        X = denseBlock(X, 7, 144, 2, 'same', 'relu')
+        X = denseBlock(X, 7, 144, 2, 'same', 'relu')
+        X = denseBlock(X, 7, 144, 2, 'same', 'relu')
+        X = transition_block(X, 7, 144, 'same', 'relu', 'avg', 5)
         X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)

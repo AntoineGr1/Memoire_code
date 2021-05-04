@@ -16,8 +16,8 @@ from time import time
 
 
 type_archi = 'ALL'
-epsilon = 1.001e-05
-dropout_rate = 0.1
+epsilon = 0.0
+dropout_rate = 0.0
 axis = 3
 compress_factor = 0.5
 
@@ -118,12 +118,22 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = id_block(X, 2, 3, 'tanh')
-        X = MaxPooling2D(pool_size=4, strides=3, padding='valid')(X)
-        X = conv_block(X, 5, 18, 'selu', 5)
-        X = id_block(X, 5, 18, 'relu')
-        X = id_block(X, 7, 18, 'relu')
-        X = GlobalMaxPooling2D()(X)
+        X = id_block(X, 6, 3, 'tanh')
+        X = conv_block(X, 4, 18, 'relu', 4)
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 5, 18, 2, 'same', 'relu')
+        X = transition_block(X, 5, 18, 'same', 'relu', 'max', 3)
+        X = MaxPooling2D(pool_size=5, strides=1, padding='same')(X)
+        X = id_block(X, 2, 18, 'tanh')
+        X = id_block(X, 4, 18, 'selu')
+        X = Conv2D(36, kernel_size=2, strides=2, activation='tanh', padding='same')(X)
+        X = conv_block(X, 2, 72, 'relu', 1)
+        X = id_block(X, 2, 72, 'tanh')
+        X = id_block(X, 3, 72, 'relu')
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

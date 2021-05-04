@@ -76,10 +76,11 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(18, kernel_size=6, strides=6, activation='tanh', padding='valid')(X)
-        X = denseBlock(X, 2, 18, 2, 'same', 'selu')
-        X = transition_block(X, 2, 18, 'same', 'selu', 'avg', 2)
-        X = AveragePooling2D(pool_size=2, strides=1, padding='valid')(X)
+        X = Conv2D(18, kernel_size=4, strides=2, activation='tanh', padding='same')(X)
+        X = Conv2D(36, kernel_size=4, strides=2, activation='tanh', padding='valid')(X)
+        X = denseBlock(X, 2, 36, 2, 'same', 'tanh')
+        X = denseBlock(X, 2, 36, 2, 'same', 'tanh')
+        X = transition_block(X, 2, 36, 'same', 'tanh', 'max', 2)
         X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)

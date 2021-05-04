@@ -3,37 +3,22 @@
             "class":"InputLayer",
 			"parameters":{"shape": [32, 32, 3]}
 		},	{
-            "class":"IdBlock",
-			"parameters":{"kernel": 5, "padding": "same", "nb_filter": 3, "fct_activation": "selu", "stride": 1}
-		},	{
             "class":"ConvBlock",
-			"parameters":{"kernel": 2, "nb_filter": 18, "padding": "same", "stride": 1, "fct_activation": "relu"}
+			"parameters":{"kernel": 7, "nb_filter": 18, "padding": "same", "stride": 7, "fct_activation": "tanh"}
 		},	{
-            "class":"Pooling",
-			"parameters":{"op": "avg", "kernel": 4, "padding": "same", "stride": 4}
+            "class":"IdBlock",
+			"parameters":{"kernel": 4, "padding": "same", "nb_filter": 18, "fct_activation": "selu", "stride": 1}
 		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 4, "padding": "valid", "stride": 1, "nb_filter": 36, "fct_activation": "tanh"}
+            "class":"DenseNetBlock",
+			"parameters":{"kernel": 4, "nb_filter": 18, "padding": "same", "nb_layer": 1, "stride": 3, "fct_activation": "selu", "op": "max", "nb_block_densenet": 4}
 		},	{
             "class":"Flatten",
 			"parameters":{}
 		},	{
             "class":"Dense",
-			"parameters":{"nb_neurones": 477, "fct_activation": "selu"}
-		},	{
-            "class":"Dense",
-			"parameters":{"nb_neurones": 403, "fct_activation": "tanh"}
-		},	{
-            "class":"Dense",
-			"parameters":{"nb_neurones": 176, "fct_activation": "selu"}
-		},	{
-            "class":"Dense",
-			"parameters":{"nb_neurones": 128, "fct_activation": "tanh"}
-		},	{
-            "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
 		},	{
             "class":"ConfArchi",
-			"parameters":{"type_archi": 0, "epsilon": 0.001, "dropout_rate": 0.01, "compress_factor": 0.5}
+			"parameters":{"type_archi": 0, "epsilon": 0.001, "dropout_rate": 0.001, "compress_factor": 0.5}
 		}
 ]

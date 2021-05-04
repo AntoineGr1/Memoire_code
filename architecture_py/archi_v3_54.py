@@ -16,8 +16,8 @@ from time import time
 
 
 type_archi = 'RESNET'
-epsilon = 1.1e-05
-dropout_rate = 0.0
+epsilon = 0.0
+dropout_rate = 0.5
 axis = 3
 compress_factor = 0.5
 
@@ -91,12 +91,15 @@ def conv_block(X, f, filters, activation, s=2):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = conv_block(X, 2, 18, 'selu', 1)
-        X = id_block(X, 3, 18, 'selu')
-        X = AveragePooling2D(pool_size=4, strides=3, padding='valid')(X)
-        X = id_block(X, 6, 18, 'relu')
-        X = id_block(X, 5, 18, 'relu')
-        X = Conv2D(36, kernel_size=7, strides=5, activation='tanh', padding='valid')(X)
+        X = Conv2D(18, kernel_size=2, strides=2, activation='relu', padding='same')(X)
+        X = conv_block(X, 2, 36, 'tanh', 1)
+        X = id_block(X, 6, 36, 'selu')
+        X = id_block(X, 4, 36, 'relu')
+        X = AveragePooling2D(pool_size=7, strides=2, padding='same')(X)
+        X = id_block(X, 4, 36, 'tanh')
+        X = MaxPooling2D(pool_size=5, strides=2, padding='same')(X)
+        X = conv_block(X, 2, 72, 'tanh', 2)
+        X = id_block(X, 5, 72, 'relu')
         X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)

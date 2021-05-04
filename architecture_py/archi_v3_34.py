@@ -16,7 +16,7 @@ from time import time
 
 
 type_archi = 'LENET'
-epsilon = 1.1e-05
+epsilon = 0.001
 dropout_rate = 0.0
 axis = 3
 compress_factor = 0.5
@@ -49,9 +49,9 @@ nb_layers = "not build"
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(18, kernel_size=7, strides=2, activation='selu', padding='valid')(X)
-        X = MaxPooling2D(pool_size=6, strides=4, padding='valid')(X)
-        X = GlobalMaxPooling2D()(X)
+        X = Conv2D(18, kernel_size=6, strides=4, activation='selu', padding='valid')(X)
+        X = Conv2D(36, kernel_size=7, strides=3, activation='relu', padding='valid')(X)
+        X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

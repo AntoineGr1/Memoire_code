@@ -4,21 +4,33 @@
 			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 4, "padding": "same", "stride": 2, "nb_filter": 18, "fct_activation": "selu"}
-		},	{
-            "class":"Pooling",
-			"parameters":{"op": "avg", "kernel": 7, "padding": "valid", "stride": 7}
+			"parameters":{"kernel": 2, "padding": "same", "stride": 2, "nb_filter": 18, "fct_activation": "selu"}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 2, "padding": "same", "stride": 2, "nb_filter": 36, "fct_activation": "selu"}
+			"parameters":{"kernel": 2, "padding": "valid", "stride": 2, "nb_filter": 36, "fct_activation": "tanh"}
 		},	{
-            "class":"GlobalPooling",
-			"parameters":{"op": "max"}
+            "class":"Convolution",
+			"parameters":{"kernel": 4, "padding": "same", "stride": 1, "nb_filter": 72, "fct_activation": "tanh"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 2, "padding": "valid", "stride": 2}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 2, "padding": "valid", "stride": 1, "nb_filter": 144, "fct_activation": "selu"}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 2, "padding": "same", "stride": 2, "nb_filter": 288, "fct_activation": "tanh"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 2, "padding": "same", "stride": 2}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
 		},	{
             "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
 		},	{
             "class":"ConfArchi",
-			"parameters":{"type_archi": 1, "epsilon": 1.1e-07, "dropout_rate": 0.01, "compress_factor": 0.5}
+			"parameters":{"type_archi": 1, "epsilon": 0.0, "dropout_rate": 0.01, "compress_factor": 0.5}
 		}
 ]

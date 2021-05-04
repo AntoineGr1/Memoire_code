@@ -4,13 +4,13 @@
 			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"Convolution",
-			"parameters":{"kernel": 3, "padding": "valid", "stride": 3, "nb_filter": 18, "fct_activation": "relu"}
-		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 5, "padding": "valid", "stride": 4, "nb_filter": 36, "fct_activation": "relu"}
+			"parameters":{"kernel": 5, "padding": "same", "stride": 2, "nb_filter": 18, "fct_activation": "relu"}
 		},	{
             "class":"Pooling",
-			"parameters":{"op": "avg", "kernel": 2, "padding": "same", "stride": 2}
+			"parameters":{"op": "max", "kernel": 5, "padding": "same", "stride": 3}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 6, "padding": "valid", "stride": 3, "nb_filter": 36, "fct_activation": "selu"}
 		},	{
             "class":"GlobalPooling",
 			"parameters":{"op": "max"}
@@ -19,6 +19,6 @@
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
 		},	{
             "class":"ConfArchi",
-			"parameters":{"type_archi": 1, "epsilon": 1.001e-05, "dropout_rate": 0.0, "compress_factor": 0.5}
+			"parameters":{"type_archi": 1, "epsilon": 1.001e-05, "dropout_rate": 0.5, "compress_factor": 0.5}
 		}
 ]

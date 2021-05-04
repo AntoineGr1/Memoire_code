@@ -16,8 +16,8 @@ from time import time
 
 
 type_archi = 'ALL'
-epsilon = 1.001e-05
-dropout_rate = 0.1
+epsilon = 0.001
+dropout_rate = 0.0
 axis = 3
 compress_factor = 0.5
 
@@ -118,9 +118,17 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(18, kernel_size=4, strides=2, activation='selu', padding='same')(X)
-        X = conv_block(X, 2, 36, 'relu', 2)
-        X = MaxPooling2D(pool_size=7, strides=4, padding='valid')(X)
+        X = conv_block(X, 7, 18, 'tanh', 1)
+        X = Conv2D(36, kernel_size=4, strides=1, activation='tanh', padding='valid')(X)
+        X = AveragePooling2D(pool_size=3, strides=1, padding='valid')(X)
+        X = conv_block(X, 4, 72, 'selu', 1)
+        X = id_block(X, 2, 72, 'tanh')
+        X = Conv2D(144, kernel_size=2, strides=2, activation='tanh', padding='same')(X)
+        X = conv_block(X, 5, 288, 'selu', 3)
+        X = id_block(X, 4, 288, 'relu')
+        X = id_block(X, 3, 288, 'relu')
+        X = AveragePooling2D(pool_size=2, strides=2, padding='same')(X)
+        X = id_block(X, 7, 288, 'selu')
         X = GlobalAveragePooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)

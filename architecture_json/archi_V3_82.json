@@ -3,19 +3,19 @@
             "class":"InputLayer",
 			"parameters":{"shape": [32, 32, 3]}
 		},	{
-            "class":"DenseNetBlock",
-			"parameters":{"kernel": 3, "nb_filter": 3, "padding": "same", "nb_layer": 3, "stride": 3, "fct_activation": "tanh", "op": "avg", "nb_block_densenet": 4}
+            "class":"Convolution",
+			"parameters":{"kernel": 6, "padding": "valid", "stride": 4, "nb_filter": 18, "fct_activation": "tanh"}
 		},	{
-            "class":"Pooling",
-			"parameters":{"op": "max", "kernel": 7, "padding": "valid", "stride": 7}
+            "class":"Convolution",
+			"parameters":{"kernel": 7, "padding": "valid", "stride": 1, "nb_filter": 36, "fct_activation": "selu"}
 		},	{
-            "class":"GlobalPooling",
-			"parameters":{"op": "max"}
+            "class":"Flatten",
+			"parameters":{}
 		},	{
             "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
 		},	{
             "class":"ConfArchi",
-			"parameters":{"type_archi": 3, "epsilon": 0.0, "dropout_rate": 0.001, "compress_factor": 0.5}
+			"parameters":{"type_archi": 3, "epsilon": 0.001, "dropout_rate": 0.5, "compress_factor": 0.5}
 		}
 ]

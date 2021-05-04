@@ -1,0 +1,24 @@
+[
+    	{
+            "class":"InputLayer",
+			"parameters":{"shape": [32, 32, 3]}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 4, "padding": "same", "stride": 4, "nb_filter": 18, "fct_activation": "selu"}
+		},	{
+            "class":"ConvBlock",
+			"parameters":{"kernel": 7, "nb_filter": 36, "padding": "same", "stride": 6, "fct_activation": "tanh"}
+		},	{
+            "class":"ConvBlock",
+			"parameters":{"kernel": 6, "nb_filter": 72, "padding": "same", "stride": 2, "fct_activation": "selu"}
+		},	{
+            "class":"GlobalPooling",
+			"parameters":{"op": "avg"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
+		},	{
+            "class":"ConfArchi",
+			"parameters":{"type_archi": 2, "epsilon": 1.1e-07, "dropout_rate": 0.0, "compress_factor": 0.5}
+		}
+]

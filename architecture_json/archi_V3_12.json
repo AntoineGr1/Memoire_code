@@ -4,27 +4,24 @@
 			"parameters":{"shape": [32, 32, 3]}
 		},	{
             "class":"DenseNetBlock",
-			"parameters":{"kernel": 2, "nb_filter": 3, "padding": "same", "nb_layer": 3, "stride": 2, "fct_activation": "tanh", "op": "avg", "nb_block_densenet": 2}
+			"parameters":{"kernel": 4, "nb_filter": 3, "padding": "same", "nb_layer": 3, "stride": 4, "fct_activation": "selu", "op": "avg", "nb_block_densenet": 1}
 		},	{
-            "class":"Convolution",
-			"parameters":{"kernel": 2, "padding": "valid", "stride": 2, "nb_filter": 18, "fct_activation": "tanh"}
-		},	{
-            "class":"DenseNetBlock",
-			"parameters":{"kernel": 6, "nb_filter": 18, "padding": "same", "nb_layer": 3, "stride": 1, "fct_activation": "relu", "op": "max", "nb_block_densenet": 3}
+            "class":"IdBlock",
+			"parameters":{"kernel": 3, "padding": "same", "nb_filter": 3, "fct_activation": "relu", "stride": 1}
 		},	{
             "class":"DenseNetBlock",
-			"parameters":{"kernel": 4, "nb_filter": 18, "padding": "same", "nb_layer": 3, "stride": 2, "fct_activation": "selu", "op": "avg", "nb_block_densenet": 3}
+			"parameters":{"kernel": 3, "nb_filter": 3, "padding": "same", "nb_layer": 1, "stride": 2, "fct_activation": "relu", "op": "avg", "nb_block_densenet": 1}
 		},	{
-            "class":"DenseNetBlock",
-			"parameters":{"kernel": 6, "nb_filter": 18, "padding": "same", "nb_layer": 3, "stride": 5, "fct_activation": "selu", "op": "avg", "nb_block_densenet": 1}
+            "class":"ConvBlock",
+			"parameters":{"kernel": 3, "nb_filter": 18, "padding": "same", "stride": 3, "fct_activation": "tanh"}
 		},	{
-            "class":"GlobalPooling",
-			"parameters":{"op": "max"}
+            "class":"Flatten",
+			"parameters":{}
 		},	{
             "class":"Dense",
 			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
 		},	{
             "class":"ConfArchi",
-			"parameters":{"type_archi": 3, "epsilon": 1.1e-05, "dropout_rate": 0.001, "compress_factor": 0.5}
+			"parameters":{"type_archi": 0, "epsilon": 1.1e-07, "dropout_rate": 0.01, "compress_factor": 0.5}
 		}
 ]

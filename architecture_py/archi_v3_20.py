@@ -15,9 +15,9 @@ import csv
 from time import time
 
 
-type_archi = 'RESNET'
-epsilon = 0.001
-dropout_rate = 0.8
+type_archi = 'ALL'
+epsilon = 1.001e-05
+dropout_rate = 0.01
 axis = 3
 compress_factor = 0.5
 
@@ -88,18 +88,41 @@ def conv_block(X, f, filters, activation, s=2):
 
     return X
     
+def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
+    x_input = X    
+    for _ in range(0,nb_layer):
+        if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+        X = Activation(activation)(X)
+        X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+        if dropout_rate != 0:
+            X = Dropout(dropout_rate)(X)
+    X = Concatenate()([X, x_input])
+    return X
+    
+def transition_block(X, f, nb_filter, padding, activation, op, stride):
+    if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+    X = Activation(activation)(X)
+    X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+    if dropout_rate != 0:
+        X = Dropout(dropout_rate)(X)
+
+    if (op == 'avg'):
+        X = AveragePooling2D(pool_size = f, strides=stride, padding=padding)(X)
+    else :
+        X = MaxPooling2D(pool_size=f, strides=stride, padding=padding)(X)
+
+    return X
+    
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = id_block(X, 2, 3, 'relu')
-        X = AveragePooling2D(pool_size=6, strides=1, padding='valid')(X)
-        X = Conv2D(18, kernel_size=7, strides=2, activation='tanh', padding='valid')(X)
-        X = AveragePooling2D(pool_size=6, strides=5, padding='valid')(X)
-        X = conv_block(X, 5, 36, 'relu', 1)
-        X = id_block(X, 6, 36, 'relu')
-        X = id_block(X, 4, 36, 'selu')
-        X = Conv2D(72, kernel_size=7, strides=2, activation='relu', padding='same')(X)
-        X = Flatten()(X)
+        X = id_block(X, 3, 3, 'selu')
+        X = AveragePooling2D(pool_size=6, strides=2, padding='valid')(X)
+        X = id_block(X, 5, 3, 'selu')
+        X = conv_block(X, 7, 18, 'tanh', 7)
+        X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

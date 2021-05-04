@@ -15,9 +15,9 @@ import csv
 from time import time
 
 
-type_archi = 'DENSENET'
-epsilon = 1.001e-05
-dropout_rate = 0.8
+type_archi = 'LENET'
+epsilon = 1.1e-07
+dropout_rate = 0.01
 axis = 3
 compress_factor = 0.5
 
@@ -46,45 +46,14 @@ train_result_acc = ""
 nb_layers = "not build"
 
 
-def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
-    x_input = X    
-    for _ in range(0,nb_layer):
-        if epsilon != 0:
-            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-        X = Activation(activation)(X)
-        X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
-        if dropout_rate != 0:
-            X = Dropout(dropout_rate)(X)
-    X = Concatenate()([X, x_input])
-    return X
-    
-def transition_block(X, f, nb_filter, padding, activation, op, stride):
-    if epsilon != 0:
-            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-    X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
-    if dropout_rate != 0:
-        X = Dropout(dropout_rate)(X)
-
-    if (op == 'avg'):
-        X = AveragePooling2D(pool_size = f, strides=stride, padding=padding)(X)
-    else :
-        X = MaxPooling2D(pool_size=f, strides=stride, padding=padding)(X)
-
-    return X
-    
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = denseBlock(X, 3, 3, 1, 'same', 'tanh')
-        X = denseBlock(X, 3, 3, 1, 'same', 'tanh')
-        X = transition_block(X, 3, 3, 'same', 'tanh', 'avg', 2)
-        X = MaxPooling2D(pool_size=2, strides=2, padding='valid')(X)
-        X = denseBlock(X, 7, 3, 1, 'same', 'selu')
-        X = denseBlock(X, 7, 3, 1, 'same', 'selu')
-        X = transition_block(X, 7, 3, 'same', 'selu', 'max', 7)
-        X = Conv2D(18, kernel_size=5, strides=3, activation='tanh', padding='same')(X)
-        X = GlobalAveragePooling2D()(X)
+        X = Conv2D(18, kernel_size=7, strides=1, activation='tanh', padding='same')(X)
+        X = Conv2D(36, kernel_size=6, strides=3, activation='selu', padding='same')(X)
+        X = Conv2D(72, kernel_size=6, strides=2, activation='relu', padding='same')(X)
+        X = MaxPooling2D(pool_size=7, strides=7, padding='same')(X)
+        X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

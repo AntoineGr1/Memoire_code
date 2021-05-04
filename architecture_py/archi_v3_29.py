@@ -15,9 +15,9 @@ import csv
 from time import time
 
 
-type_archi = 'ALL'
-epsilon = 0.001
-dropout_rate = 0.01
+type_archi = 'LENET'
+epsilon = 1.001e-05
+dropout_rate = 0.001
 axis = 3
 compress_factor = 0.5
 
@@ -46,94 +46,17 @@ train_result_acc = ""
 nb_layers = "not build"
 
 
-def id_block(X, f, filters, activation):
-
-    X_shortcut = X
-
-    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-
-
-    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-
-    X = Add()([X, X_shortcut])# SKIP Connection
-    X = Activation(activation)(X)
-
-    return X
-    
-def conv_block(X, f, filters, activation, s=2):
-
-    X_shortcut = X
-
-    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-
-    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-
-    X_shortcut = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X_shortcut)
-    if epsilon != 0:
-        X_shortcut = BatchNormalization(epsilon = epsilon, axis=axis)(X_shortcut)
-
-
-    X = Add()([X, X_shortcut])
-    X = Activation(activation)(X)
-
-    return X
-    
-def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
-    x_input = X    
-    for _ in range(0,nb_layer):
-        if epsilon != 0:
-            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-        X = Activation(activation)(X)
-        X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
-        if dropout_rate != 0:
-            X = Dropout(dropout_rate)(X)
-    X = Concatenate()([X, x_input])
-    return X
-    
-def transition_block(X, f, nb_filter, padding, activation, op, stride):
-    if epsilon != 0:
-            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-    X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
-    if dropout_rate != 0:
-        X = Dropout(dropout_rate)(X)
-
-    if (op == 'avg'):
-        X = AveragePooling2D(pool_size = f, strides=stride, padding=padding)(X)
-    else :
-        X = MaxPooling2D(pool_size=f, strides=stride, padding=padding)(X)
-
-    return X
-    
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = denseBlock(X, 7, 3, 1, 'same', 'relu')
-        X = denseBlock(X, 7, 3, 1, 'same', 'relu')
-        X = transition_block(X, 7, 3, 'same', 'relu', 'max', 5)
-        X = Conv2D(18, kernel_size=2, strides=1, activation='tanh', padding='valid')(X)
-        X = Conv2D(36, kernel_size=4, strides=1, activation='tanh', padding='same')(X)
-        X = conv_block(X, 4, 72, 'relu', 3)
-        X = denseBlock(X, 2, 72, 3, 'same', 'tanh')
-        X = denseBlock(X, 2, 72, 3, 'same', 'tanh')
-        X = denseBlock(X, 2, 72, 3, 'same', 'tanh')
-        X = transition_block(X, 2, 72, 'same', 'tanh', 'avg', 1)
-        X = denseBlock(X, 2, 72, 2, 'same', 'relu')
-        X = denseBlock(X, 2, 72, 2, 'same', 'relu')
-        X = denseBlock(X, 2, 72, 2, 'same', 'relu')
-        X = denseBlock(X, 2, 72, 2, 'same', 'relu')
-        X = transition_block(X, 2, 72, 'same', 'relu', 'max', 2)
-        X = GlobalMaxPooling2D()(X)
+        X = Conv2D(18, kernel_size=2, strides=2, activation='tanh', padding='same')(X)
+        X = Conv2D(36, kernel_size=7, strides=1, activation='relu', padding='valid')(X)
+        X = MaxPooling2D(pool_size=3, strides=2, padding='same')(X)
+        X = Conv2D(72, kernel_size=4, strides=2, activation='relu', padding='same')(X)
+        X = Flatten()(X)
+        X = Dense(392, activation='tanh')(X)
+        X = Dense(165, activation='selu')(X)
+        X = Dense(116, activation='relu')(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

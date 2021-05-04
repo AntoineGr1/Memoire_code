@@ -15,9 +15,9 @@ import csv
 from time import time
 
 
-type_archi = 'RESNET'
+type_archi = 'LENET'
 epsilon = 1.001e-05
-dropout_rate = 0.0
+dropout_rate = 0.1
 axis = 3
 compress_factor = 0.5
 
@@ -46,56 +46,13 @@ train_result_acc = ""
 nb_layers = "not build"
 
 
-def id_block(X, f, filters, activation):
-
-    X_shortcut = X
-
-    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-
-
-    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-
-    X = Add()([X, X_shortcut])# SKIP Connection
-    X = Activation(activation)(X)
-
-    return X
-    
-def conv_block(X, f, filters, activation, s=2):
-
-    X_shortcut = X
-
-    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-    X = Activation(activation)(X)
-
-    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
-    if epsilon != 0:
-        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
-
-    X_shortcut = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X_shortcut)
-    if epsilon != 0:
-        X_shortcut = BatchNormalization(epsilon = epsilon, axis=axis)(X_shortcut)
-
-
-    X = Add()([X, X_shortcut])
-    X = Activation(activation)(X)
-
-    return X
-    
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = conv_block(X, 6, 18, 'relu', 1)
-        X = id_block(X, 4, 18, 'tanh')
-        X = Conv2D(36, kernel_size=4, strides=4, activation='selu', padding='valid')(X)
-        X = AveragePooling2D(pool_size=7, strides=2, padding='same')(X)
-        X = Flatten()(X)
+        X = Conv2D(18, kernel_size=3, strides=2, activation='tanh', padding='same')(X)
+        X = AveragePooling2D(pool_size=3, strides=1, padding='valid')(X)
+        X = Conv2D(36, kernel_size=5, strides=4, activation='selu', padding='same')(X)
+        X = GlobalAveragePooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

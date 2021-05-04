@@ -15,9 +15,9 @@ import csv
 from time import time
 
 
-type_archi = 'RESNET'
-epsilon = 1.1e-05
-dropout_rate = 0.001
+type_archi = 'ALL'
+epsilon = 1.1e-07
+dropout_rate = 0.4
 axis = 3
 compress_factor = 0.5
 
@@ -88,17 +88,43 @@ def conv_block(X, f, filters, activation, s=2):
 
     return X
     
+def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
+    x_input = X    
+    for _ in range(0,nb_layer):
+        if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+        X = Activation(activation)(X)
+        X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+        if dropout_rate != 0:
+            X = Dropout(dropout_rate)(X)
+    X = Concatenate()([X, x_input])
+    return X
+    
+def transition_block(X, f, nb_filter, padding, activation, op, stride):
+    if epsilon != 0:
+            X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+    X = Activation(activation)(X)
+    X = Conv2D(filters=nb_filter, kernel_size=(f, f), strides=(1, 1), padding=padding)(X)
+    if dropout_rate != 0:
+        X = Dropout(dropout_rate)(X)
+
+    if (op == 'avg'):
+        X = AveragePooling2D(pool_size = f, strides=stride, padding=padding)(X)
+    else :
+        X = MaxPooling2D(pool_size=f, strides=stride, padding=padding)(X)
+
+    return X
+    
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = conv_block(X, 2, 18, 'relu', 2)
-        X = Conv2D(36, kernel_size=4, strides=3, activation='relu', padding='same')(X)
-        X = AveragePooling2D(pool_size=3, strides=1, padding='same')(X)
-        X = conv_block(X, 7, 72, 'tanh', 4)
-        X = conv_block(X, 7, 144, 'relu', 7)
-        X = Flatten()(X)
-        X = Dense(127, activation='tanh')(X)
-        X = Dense(112, activation='relu')(X)
+        X = Conv2D(18, kernel_size=4, strides=3, activation='selu', padding='same')(X)
+        X = Conv2D(36, kernel_size=5, strides=4, activation='relu', padding='valid')(X)
+        X = denseBlock(X, 6, 36, 1, 'same', 'relu')
+        X = denseBlock(X, 6, 36, 1, 'same', 'relu')
+        X = denseBlock(X, 6, 36, 1, 'same', 'relu')
+        X = transition_block(X, 6, 36, 'same', 'relu', 'avg', 6)
+        X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

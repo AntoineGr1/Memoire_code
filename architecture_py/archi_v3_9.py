@@ -15,9 +15,9 @@ import csv
 from time import time
 
 
-type_archi = 'DENSENET'
-epsilon = 1.1e-07
-dropout_rate = 0.4
+type_archi = 'ALL'
+epsilon = 0.0
+dropout_rate = 0.8
 axis = 3
 compress_factor = 0.5
 
@@ -46,6 +46,48 @@ train_result_acc = ""
 nb_layers = "not build"
 
 
+def id_block(X, f, filters, activation):
+
+    X_shortcut = X
+
+    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
+    if epsilon != 0:
+        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+    X = Activation(activation)(X)
+
+
+    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
+    if epsilon != 0:
+        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+
+    X = Add()([X, X_shortcut])# SKIP Connection
+    X = Activation(activation)(X)
+
+    return X
+    
+def conv_block(X, f, filters, activation, s=2):
+
+    X_shortcut = X
+
+    X = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X)
+    if epsilon != 0:
+        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+    X = Activation(activation)(X)
+
+    X = Conv2D(filters=filters, kernel_size=(f, f), strides=(1, 1), padding='same', kernel_initializer=glorot_uniform(seed=0))(X)
+    if epsilon != 0:
+        X = BatchNormalization(epsilon = epsilon, axis=axis)(X)
+
+    X_shortcut = Conv2D(filters=filters, kernel_size=(1, 1), strides=(s, s), padding='valid', kernel_initializer=glorot_uniform(seed=0))(X_shortcut)
+    if epsilon != 0:
+        X_shortcut = BatchNormalization(epsilon = epsilon, axis=axis)(X_shortcut)
+
+
+    X = Add()([X, X_shortcut])
+    X = Activation(activation)(X)
+
+    return X
+    
 def denseBlock(X, f, nb_filter, nb_layer, padding, activation):
     x_input = X    
     for _ in range(0,nb_layer):
@@ -76,18 +118,11 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = denseBlock(X, 3, 3, 2, 'same', 'selu')
-        X = transition_block(X, 3, 3, 'same', 'selu', 'avg', 1)
-        X = Conv2D(18, kernel_size=6, strides=2, activation='relu', padding='same')(X)
-        X = AveragePooling2D(pool_size=3, strides=1, padding='valid')(X)
-        X = Conv2D(36, kernel_size=4, strides=1, activation='tanh', padding='same')(X)
-        X = denseBlock(X, 4, 36, 1, 'same', 'relu')
-        X = denseBlock(X, 4, 36, 1, 'same', 'relu')
-        X = denseBlock(X, 4, 36, 1, 'same', 'relu')
-        X = transition_block(X, 4, 36, 'same', 'relu', 'avg', 2)
-        X = AveragePooling2D(pool_size=2, strides=1, padding='same')(X)
-        X = Conv2D(72, kernel_size=6, strides=6, activation='selu', padding='valid')(X)
-        X = GlobalAveragePooling2D()(X)
+        X = id_block(X, 3, 3, 'relu')
+        X = conv_block(X, 5, 18, 'tanh', 5)
+        X = conv_block(X, 3, 36, 'selu', 2)
+        X = AveragePooling2D(pool_size=4, strides=1, padding='valid')(X)
+        X = GlobalMaxPooling2D()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model

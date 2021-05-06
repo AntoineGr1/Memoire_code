@@ -65,7 +65,7 @@ try:
     start = time()
     es = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1)
     list_cb = [es]
-    history = model.fit(train_x, train_y, epochs=50, batch_size=64, validation_split=0.2, callbacks=list_cb)
+    history = model.fit(train_x, train_y, epochs=50, batch_size=1024, validation_split=0.3, callbacks=list_cb)
     training_time = time()-start
     print(model.evaluate(test_x, test_y))
 

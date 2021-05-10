@@ -1,0 +1,1 @@
+test result : [nan, 0.10000000149011612]train result : [nan, 0.10000000149011612]History train result : {'loss': [nan], 'accuracy': [0.103885717689991], 'val_loss': [nan], 'val_accuracy': [0.10253333300352097]}

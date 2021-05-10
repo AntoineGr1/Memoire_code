@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "archi_resnet_3.py", line 92, in <module>
+    Input = ResNet()
+  File "archi_resnet_3.py", line 78, in ResNet
+    X = id_block(X, 4, 18)
+  File "archi_resnet_3.py", line 52, in id_block
+    X = Add()([X, X_shortcut])# SKIP Connection
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\base_layer.py", line 748, in __call__
+    self._maybe_build(inputs)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\base_layer.py", line 2116, in _maybe_build
+    self.build(input_shapes)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\utils\tf_utils.py", line 306, in wrapper
+    output_shape = fn(instance, input_shape)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\layers\merge.py", line 110, in build
+    output_shape = self._compute_elemwise_op_output_shape(output_shape, shape)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\layers\merge.py", line 83, in _compute_elemwise_op_output_shape
+    'together with shapes ' + str(shape1) + ' ' + str(shape2))
+ValueError: Operands could not be broadcast together with shapes (32, 32, 18) (32, 32, 3)

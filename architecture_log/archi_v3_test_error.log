@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "archi_v3_test.py", line 91, in <module>
+    model = getModel()
+  File "archi_v3_test.py", line 80, in getModel
+    X = denseBlock(X, 3, 6, 2, same, relu)
+NameError: name 'same' is not defined

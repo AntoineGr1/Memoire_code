@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "archi_resnet_9.py", line 98, in <module>
+    head_model = Dense(26015, activation='tanh')(head_model)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\base_layer.py", line 748, in __call__
+    self._maybe_build(inputs)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\base_layer.py", line 2116, in _maybe_build
+    self.build(input_shapes)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\layers\core.py", line 1113, in build
+    trainable=True)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\base_layer.py", line 446, in add_weight
+    caching_device=caching_device)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\training\tracking\base.py", line 744, in _add_variable_with_custom_getter
+    **kwargs_for_getter)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\base_layer_utils.py", line 142, in make_variable
+    shape=variable_shape if variable_shape else None)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\variables.py", line 258, in __call__
+    return cls._variable_v1_call(*args, **kwargs)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\variables.py", line 219, in _variable_v1_call
+    shape=shape)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\variables.py", line 197, in <lambda>
+    previous_getter = lambda **kwargs: default_variable_creator(None, **kwargs)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\variable_scope.py", line 2596, in default_variable_creator
+    shape=shape)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\variables.py", line 262, in __call__
+    return super(VariableMetaclass, cls).__call__(*args, **kwargs)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\resource_variable_ops.py", line 1411, in __init__
+    distribute_strategy=distribute_strategy)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\resource_variable_ops.py", line 1542, in _init_from_args
+    initial_value() if init_from_fn else initial_value,
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\base_layer_utils.py", line 122, in <lambda>
+    init_val = lambda: initializer(shape, dtype=dtype)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\init_ops_v2.py", line 425, in __call__
+    return self._random_generator.random_uniform(shape, -limit, limit, dtype)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\init_ops_v2.py", line 788, in random_uniform
+    shape=shape, minval=minval, maxval=maxval, dtype=dtype, seed=self.seed)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\random_ops.py", line 272, in random_uniform
+    rnd = gen_random_ops.random_uniform(shape, dtype, seed=seed1, seed2=seed2)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\ops\gen_random_ops.py", line 724, in random_uniform
+    _ops.raise_from_not_ok_status(e, name)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\framework\ops.py", line 6606, in raise_from_not_ok_status
+    six.raise_from(core._status_to_exception(e.code, message), None)
+  File "<string>", line 3, in raise_from
+tensorflow.python.framework.errors_impl.ResourceExhaustedError: OOM when allocating tensor with shape[73728,26015] and type float on /job:localhost/replica:0/task:0/device:GPU:0 by allocator GPU_0_bfc [Op:RandomUniform]

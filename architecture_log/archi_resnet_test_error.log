@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "archi_resnet_test.py", line 99, in <module>
+    model.fit(train_x, train_y, epochs=5, validation_data=(val_x, val_y))
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training.py", line 819, in fit
+    use_multiprocessing=use_multiprocessing)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_v2.py", line 235, in fit
+    use_multiprocessing=use_multiprocessing)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_v2.py", line 593, in _process_training_inputs
+    use_multiprocessing=use_multiprocessing)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_v2.py", line 646, in _process_inputs
+    x, y, sample_weight=sample_weights)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training.py", line 2383, in _standardize_user_data
+    batch_size=batch_size)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training.py", line 2410, in _standardize_tensors
+    exception_prefix='input')
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_utils.py", line 582, in standardize_input_data
+    str(data_shape))
+ValueError: Error when checking input: expected input_1 to have shape (32, 32, 3) but got array with shape (28, 28, 1)

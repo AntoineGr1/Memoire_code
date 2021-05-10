@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "archi_v3_2.py", line 108, in <module>
+    history = model.fit(train_x, train_y, epochs=50, validation_split=0.1, callbacks=list_cb)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training.py", line 819, in fit
+    use_multiprocessing=use_multiprocessing)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_v2.py", line 342, in fit
+    total_epochs=epochs)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_v2.py", line 128, in run_one_epoch
+    batch_outs = execution_function(iterator)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_v2_utils.py", line 98, in execution_function
+    distributed_function(input_fn))
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\util\nest.py", line 568, in map_structure
+    structure[0], [func(*x) for x in entries],
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\util\nest.py", line 568, in <listcomp>
+    structure[0], [func(*x) for x in entries],
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\keras\engine\training_v2_utils.py", line 130, in _non_none_constant_value
+    constant_value = tensor_util.constant_value(v)
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\framework\tensor_util.py", line 822, in constant_value
+    return tensor.numpy()
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\framework\ops.py", line 942, in numpy
+    maybe_arr = self._numpy()  # pylint: disable=protected-access
+  File "C:\Users\antoi\anaconda3\envs\Python37\lib\site-packages\tensorflow_core\python\framework\ops.py", line 908, in _numpy
+    return self._numpy_internal()
+KeyboardInterrupt

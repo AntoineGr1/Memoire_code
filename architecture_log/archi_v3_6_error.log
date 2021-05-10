@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "archi_v3_6.py", line 64, in <module>
+    model = getModel()
+  File "archi_v3_6.py", line 52, in getModel
+    X = denseBlock(X, 6, 1, 2, 'same', 'tanh')
+NameError: name 'denseBlock' is not defined

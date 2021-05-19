@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/agratia/Memoire_code/architecture_py/archi_v3_1.py", line 138, in <module>
+    plot_model(model, show_shapes=True, to_file="../architecture_img/archi_v3_1.png")
+  File "/home/agratia/.local/lib/python3.9/site-packages/tensorflow/python/keras/utils/vis_utils.py", line 322, in plot_model
+    dot = model_to_dot(
+  File "/home/agratia/.local/lib/python3.9/site-packages/tensorflow/python/keras/utils/vis_utils.py", line 114, in model_to_dot
+    raise ImportError(message)
+ImportError: ('You must install pydot (`pip install pydot`) and install graphviz (see instructions at https://graphviz.gitlab.io/download/) ', 'for plot_model/model_to_dot to work.')

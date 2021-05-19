@@ -147,7 +147,7 @@ model18 = Model(inputs=Input18.input, outputs=headModel18)
 # In[9]:
 
 
-plot_model(model18, show_shapes=True)
+#plot_model(model18, show_shapes=True)
 
 
 # In[10]:
@@ -161,7 +161,7 @@ len(model18.layers)
 # In[11]:
 
 
-es = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1)
+es = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1, patience=1, restore_best_weights=True)
 list_cb = [es]
 
 
@@ -169,26 +169,26 @@ list_cb = [es]
 
 
 start = time()
-model18.fit( train_x , train_y , epochs=50, batch_size=1024, validation_split=0.3, callbacks=list_cb)
+model18.fit( train_x , train_y , epochs=50, batch_size=64, validation_split=0.3, callbacks=list_cb)
 training_time = time()-start
 
 
 # In[14]:
 
 
-model18.evaluate(test_x, test_y)
+print(model18.evaluate(test_x, test_y))
 
 
 # In[15]:
 
 
-model18.evaluate(train_x, train_y)
+print(model18.evaluate(train_x, train_y))
 
 
 # In[16]:
 
 
-training_time
+print(training_time)
 
 
 # In[ ]:

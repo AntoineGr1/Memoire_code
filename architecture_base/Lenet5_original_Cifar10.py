@@ -17,7 +17,7 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.initializers import glorot_uniform
 from tensorflow.keras.utils import plot_model
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from time import time
 
 from tensorflow.keras.datasets import cifar10
@@ -55,7 +55,7 @@ test_x.shape
 # In[5]:
 
 
-plt.imshow(test_x[215])
+#plt.imshow(test_x[215])
 
 
 # In[6]:
@@ -105,7 +105,7 @@ list_cb = [es]
 
 
 start = time()
-CNN_model.fit( train_x , train_y , epochs=50, batch_size=1024, validation_split=0.3, callbacks=list_cb)
+CNN_model.fit( train_x , train_y , epochs=50, batch_size=64, validation_split=0.3, callbacks=list_cb)
 training_time = time()-start
 
 

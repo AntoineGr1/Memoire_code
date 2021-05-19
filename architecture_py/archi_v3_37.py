@@ -58,7 +58,7 @@ try:
         return model
 
     model = getModel()
-    plot_model(model, show_shapes=True, to_file="../architecture_img/archi_v3_37.png")
+    #plot_model(model, show_shapes=True, to_file="../architecture_img/archi_v3_37.png")
     model.compile(optimizer='adam', loss=keras.losses.sparse_categorical_crossentropy, metrics=['accuracy'])
 
     start = time()

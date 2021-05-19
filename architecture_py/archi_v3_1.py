@@ -16,7 +16,7 @@ from time import time
 
 
 type_archi = 'ALL'
-epsilon = 1.001e-05
+epsilon = 1.1e-05
 dropout_rate = 0.001
 axis = 3
 compress_factor = 0.5
@@ -118,16 +118,19 @@ def transition_block(X, f, nb_filter, padding, activation, op, stride):
 try:
     def getModel():
         X_input = X = Input([32, 32, 3])
-        X = Conv2D(18, kernel_size=6, strides=1, activation='relu', padding='same')(X)
-        X = Conv2D(36, kernel_size=4, strides=3, activation='selu', padding='valid')(X)
-        X = MaxPooling2D(pool_size=6, strides=6, padding='valid')(X)
+        X = conv_block(X, 7, 18, 'relu', 1)
+        X = denseBlock(X, 4, 18, 2, 'same', 'relu')
+        X = denseBlock(X, 4, 18, 2, 'same', 'relu')
+        X = transition_block(X, 4, 18, 'same', 'relu', 'avg', 3)
+        X = Conv2D(36, kernel_size=7, strides=6, activation='tanh', padding='same')(X)
+        X = conv_block(X, 3, 72, 'selu', 3)
         X = Flatten()(X)
         X = Dense(10, activation='softmax')(X)
         model = Model(inputs=X_input, outputs=X)
         return model
 
     model = getModel()
-    #plot_model(model, show_shapes=True, to_file="../architecture_img/archi_v3_8.png")
+    #plot_model(model, show_shapes=True, to_file="../architecture_img/archi_v3_1.png")
     model.compile(optimizer='adam', loss=keras.losses.sparse_categorical_crossentropy, metrics=['accuracy'])
 
     start = time()
@@ -137,7 +140,7 @@ try:
     training_time = time()-start
     print(model.evaluate(test_x, test_y))
 
-    log_file = open("../architecture_log/archi_v3_8.log" , "w")
+    log_file = open("../architecture_log/archi_v3_1.log" , "w")
     
     # save test result
     log_file.write('test result : ' + str(model.evaluate(test_x, test_y)))
@@ -150,13 +153,13 @@ try:
     train_result_loss = model.evaluate(train_x, train_y)[0]
     train_result_acc = model.evaluate(train_x, train_y)[1]
     
-    print('OK: file ../architecture_log/archi_v3_8.log has been create')
+    print('OK: file ../architecture_log/archi_v3_1.log has been create')
     
     nb_layers = len(model.layers)
     log_file.close()
 except:
-    print('error: file ../architecture_log/archi_v3_8_error.log has been create')
-    error_file = open("../architecture_log/archi_v3_8_error.log" , "w")
+    print('error: file ../architecture_log/archi_v3_1_error.log has been create')
+    error_file = open("../architecture_log/archi_v3_1_error.log" , "w")
     traceback.print_exc(file=error_file)
     result_loss = "Error"
     result_acc = "Error"
@@ -171,7 +174,7 @@ finally:
       
         # writing data row-wise into the csv file 
         # writer.writeheader() 
-        writer.writerow({'file_name' : 'archi_v3_8',  
+        writer.writerow({'file_name' : 'archi_v3_1',  
                          'training_time(s)': training_time,  
                          'test_result_loss': test_result_loss,
                          'test_result_acc': test_result_acc,

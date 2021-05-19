@@ -93,9 +93,9 @@ try:
     model.compile(optimizer='adam', loss=keras.losses.sparse_categorical_crossentropy, metrics=['accuracy'])
 
     start = time()
-    es = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1)
+    es = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1, restore_best_weights=True, patience=1)
     list_cb = [es]
-    history = model.fit(train_x, train_y, epochs=50, batch_size=1024, validation_split=0.3, callbacks=list_cb)
+    history = model.fit(train_x, train_y, epochs=50, batch_size=64, validation_split=0.3, callbacks=list_cb)
     training_time = time()-start
     print(model.evaluate(test_x, test_y))
 

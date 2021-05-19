@@ -99,7 +99,7 @@ val_y = train_y[:5000]
 # In[6]:
 
 
-es = tf.keras.callbacks.EarlyStopping(mmonitor='loss', verbose=1, restore_best_weights=True, patience=1)
+es = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1, restore_best_weights=True, patience=1)
 list_cb = [es]
 
 
@@ -108,7 +108,7 @@ list_cb = [es]
 
 
 start = time()
-model.fit( train_x , train_y , epochs=50, batch_size=1024, validation_split=0.3, callbacks=list_cb)
+model.fit( train_x , train_y , epochs=50, batch_size=64, validation_split=0.3, callbacks=list_cb)
 training_time = time()-start
 
 
@@ -117,17 +117,17 @@ training_time = time()-start
 # In[8]:
 
 
-model.evaluate(test_x, test_y)
+print(model.evaluate(test_x, test_y))
 
 
 # In[9]:
 
 
-model.evaluate(train_x, train_y)
+print(model.evaluate(train_x, train_y))
 
 
 # In[10]:
 
 
-training_time
+print(training_time)
 

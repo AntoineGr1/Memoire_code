@@ -98,7 +98,7 @@ print(len(model.layers))
 # In[7]:
 
 
-plot_model(model, show_shapes=True, to_file="densenet.png")
+#plot_model(model, show_shapes=True, to_file="densenet.png")
 
 
 # In[8]:
@@ -125,7 +125,7 @@ list_cb = [es]
 
 
 start = time()
-model.fit( train_x , train_y , epochs=50, batch_size=1024, validation_split=0.3, callbacks=list_cb)
+model.fit( train_x , train_y , epochs=50, batch_size=64, validation_split=0.3, callbacks=list_cb)
 training_time = time()-start
 
 

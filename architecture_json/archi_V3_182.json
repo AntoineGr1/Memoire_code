@@ -1,0 +1,30 @@
+[
+    	{
+            "class":"InputLayer",
+			"parameters":{"shape": [32, 32, 3]}
+		},	{
+            "class":"DenseNetBlock",
+			"parameters":{"kernel": 3, "nb_filter": 3, "padding": "same", "nb_layer": 2, "stride": 2, "fct_activation": "tanh", "op": "max", "nb_block_densenet": 3}
+		},	{
+            "class":"DenseNetBlock",
+			"parameters":{"kernel": 6, "nb_filter": 3, "padding": "same", "nb_layer": 2, "stride": 5, "fct_activation": "relu", "op": "max", "nb_block_densenet": 2}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 2, "padding": "same", "stride": 1, "nb_filter": 18, "fct_activation": "relu"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "avg", "kernel": 2, "padding": "valid", "stride": 2}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 6, "padding": "same", "stride": 6, "nb_filter": 36, "fct_activation": "relu"}
+		},	{
+            "class":"GlobalPooling",
+			"parameters":{"op": "avg"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
+		},	{
+            "class":"ConfArchi",
+			"parameters":{"type_archi": 3, "epsilon": 1.1e-07, "dropout_rate": 0.4, "compress_factor": 0.5}
+		}
+]

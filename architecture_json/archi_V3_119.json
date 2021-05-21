@@ -1,0 +1,21 @@
+[
+    	{
+            "class":"InputLayer",
+			"parameters":{"shape": [32, 32, 3]}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 6, "padding": "valid", "stride": 6, "nb_filter": 18, "fct_activation": "selu"}
+		},	{
+            "class":"DenseNetBlock",
+			"parameters":{"kernel": 6, "nb_filter": 18, "padding": "same", "nb_layer": 1, "stride": 6, "fct_activation": "relu", "op": "avg", "nb_block_densenet": 1}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
+		},	{
+            "class":"ConfArchi",
+			"parameters":{"type_archi": 0, "epsilon": 1.1e-07, "dropout_rate": 0.8, "compress_factor": 0.5}
+		}
+]

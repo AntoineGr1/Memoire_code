@@ -1,0 +1,27 @@
+[
+    	{
+            "class":"InputLayer",
+			"parameters":{"shape": [32, 32, 3]}
+		},	{
+            "class":"ConvBlock",
+			"parameters":{"kernel": 2, "nb_filter": 18, "padding": "same", "stride": 1, "fct_activation": "tanh"}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 7, "padding": "same", "stride": 7, "nb_filter": 36, "fct_activation": "tanh"}
+		},	{
+            "class":"DenseNetBlock",
+			"parameters":{"kernel": 4, "nb_filter": 36, "padding": "same", "nb_layer": 1, "stride": 2, "fct_activation": "relu", "op": "max", "nb_block_densenet": 5}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 275, "fct_activation": "tanh"}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
+		},	{
+            "class":"ConfArchi",
+			"parameters":{"type_archi": 0, "epsilon": 1.001e-05, "dropout_rate": 0.8, "compress_factor": 0.5}
+		}
+]

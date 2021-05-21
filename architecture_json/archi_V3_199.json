@@ -1,0 +1,21 @@
+[
+    	{
+            "class":"InputLayer",
+			"parameters":{"shape": [32, 32, 3]}
+		},	{
+            "class":"Convolution",
+			"parameters":{"kernel": 6, "padding": "valid", "stride": 3, "nb_filter": 18, "fct_activation": "tanh"}
+		},	{
+            "class":"Pooling",
+			"parameters":{"op": "max", "kernel": 7, "padding": "valid", "stride": 6}
+		},	{
+            "class":"Flatten",
+			"parameters":{}
+		},	{
+            "class":"Dense",
+			"parameters":{"nb_neurones": 10, "fct_activation": "softmax"}
+		},	{
+            "class":"ConfArchi",
+			"parameters":{"type_archi": 3, "epsilon": 0.0, "dropout_rate": 0.8, "compress_factor": 0.5}
+		}
+]
